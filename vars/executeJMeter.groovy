@@ -1,4 +1,4 @@
-
+import org.apache.commons.io.FileUtils
 /***************************\
   This function assumes we run on a Jenkins Agent that has JMeter installed
 
@@ -21,6 +21,7 @@ def call( Map args )
 {
     // check input arguments
     String scriptName = args.containsKey("scriptName") ? args.scriptName : ""
+    String resultsDir = args.containsKey("resultsDir") ? args.scriptName : "results"
     String serverUrl = args.containsKey("serverUrl") ? args.serverUrl : ""
     int serverPort = args.containsKey("serverPort") ? args.serverPort : 80
     String checkPath = args.containsKey("checkPath") ? args.checkPath : "/health"
@@ -41,14 +42,23 @@ def call( Map args )
 
     int errorCode = 0
 
+    // check results dir exists and is empty
+    def resultsFolder = new File(resultsDir)
+    if (!resultsFolder.exists()) {
+        resultsFolder.mkdirs()
+    } else {
+        FileUtils.cleanDirectory(resultsFolder)
+    }
+
     // lets run the test and put the console output to output.txt
     echo "Execute the jMeter test and console output goes to output.txt."
-    sh "/jmeter/bin/jmeter.sh -n -t ./${scriptName} -e -o results -l result.tlf -JSERVER_URL='${serverUrl}' -JDT_LTN='${LTN}' -JVUCount='${vuCount}' -JLoopCount='${loopCount}' -JCHECK_PATH='${checkPath}' -JSERVER_PORT='${serverPort}' -JThinkTime='${thinkTime}' > output.txt"                    
+    sh "/jmeter/bin/jmeter.sh -n -t ./${scriptName} -e -o ${resultsDir} -l result.tlf -JSERVER_URL='${serverUrl}' -JDT_LTN='${LTN}' -JVUCount='${vuCount}' -JLoopCount='${loopCount}' -JCHECK_PATH='${checkPath}' -JSERVER_PORT='${serverPort}' -JThinkTime='${thinkTime}' > output.txt"                    
     sh "cat output.txt"
 
     // archive the artifacts
     perfReport percentiles: '0,50,90,100', sourceDataFiles: 'result.tlf'
-    archiveArtifacts artifacts:'*.*/**'
+    // archiveArtifacts artifacts:'*.*/**'
+    archiveArtifacts artifacts:"${resultsDir}/**"
 
     // do post test validation checks
     sh "awk '/summary =/ {print \$15;}' output.txt >> errorCount.txt"
