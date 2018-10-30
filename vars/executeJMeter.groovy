@@ -30,6 +30,7 @@ def call(   String scriptName,
     // do post test validation checks
     sh "awk '/summary =/ {print \$15;}' output.txt >> errorCount.txt"
     def errorCount=readFile("errorCount.txt").trim()
+    echo "ErrorCount: ${errorCount}"
     if(funcValidation && errorCount > 0) {
         echo "More than 1 functional error"
         errorCode = 1
@@ -38,6 +39,7 @@ def call(   String scriptName,
 
     sh "awk '/summary =/ {print \$9;}' output.txt >> avgRt.txt"
     def avgRt=readFile("avgRt.txt").trim()
+    echo "avgRt: ${avgRt}"
     if((avgRtValidation > 0) && (avgRt > avgRtValidation)) {
         echo "Response Time Threshold Violation: ${avgRt} > ${avgRtValidation}"
         errorCode = 2
