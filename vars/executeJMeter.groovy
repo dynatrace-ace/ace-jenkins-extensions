@@ -66,12 +66,11 @@ def call( Map args )
 
     // do post test validation checks
     sh "awk '/summary =/ {print \$15;}' output.txt > errorCount.txt"
-    //int errorCount=readFile("errorCount.txt").trim().toInteger()
     int errorCount = 0
     readFile("errorCount.txt").eachLine { String line ->
         errorCount += line.toInteger()
     }
-    // DBG: echo "ErrorCount: ${errorCount}"
+    echo "ErrorCount: ${errorCount}"
 
     if(funcValidation && errorCount > 0) {
         echo "More than 1 functional error"
@@ -80,8 +79,11 @@ def call( Map args )
     }
 
     sh "awk '/summary =/ {print \$9;}' output.txt > avgRt.txt"
-    int avgRt=readFile("avgRt.txt").trim().toInteger()
-    // DBG: echo "avgRt: ${avgRt}"
+    int avgRt = 0
+    readFile("avgRt.txt").eachLine { String line ->
+        line.toInteger() > avgRT ? avgRT = line.toInteger()
+    }
+    echo "avgRt: ${avgRt}"
 
     if((avgRtValidation > 0) && (avgRt > avgRtValidation)) {
         echo "Response Time Threshold Violation: ${avgRt} > ${avgRtValidation}"
