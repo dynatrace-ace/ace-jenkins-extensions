@@ -52,8 +52,6 @@ def call( Map args )
         echo "Clean results directory: ${resultsDir}"
     }
 
-    sh "ls -l"
-
     // lets run the test and put the console output to output.txt
     echo "Execute the jMeter test and console output goes to output.txt."
     sh "/jmeter/bin/jmeter.sh -n -t ./${scriptName} -e -o ${resultsDir} -l ${resultsDir}.tlf -JSERVER_URL='${serverUrl}' -JDT_LTN='${LTN}' -JVUCount='${vuCount}' -JLoopCount='${loopCount}' -JCHECK_PATH='${checkPath}' -JSERVER_PORT='${serverPort}' -JThinkTime='${thinkTime}' > output.txt"                    
@@ -67,9 +65,9 @@ def call( Map args )
     sh "awk '/summary =/ {print \$15;}' output.txt > errorCount.txt"
     int errorCount = 0
     readFile("errorCount.txt").eachLine { String line ->
-        errorCount += line.toInteger()
+        errorCount += line.trim().toInteger()
     }
-    echo "ErrorCount: ${errorCount}"
+    // DBG: echo "ErrorCount: ${errorCount}"
 
     if(funcValidation && errorCount > 0) {
         echo "More than 1 functional error"
@@ -80,9 +78,9 @@ def call( Map args )
     sh "awk '/summary =/ {print \$9;}' output.txt > avgRt.txt"
     int avgRt = 0
     readFile("avgRt.txt").eachLine { String line ->
-        avgRt = line.toInteger() > avgRt ? line.toInteger() : avgRt
+        avgRt = line.trim().toInteger() > avgRt ? line.toInteger() : avgRt
     }
-    echo "avgRt: ${avgRt}"
+    // DBG: echo "avgRt: ${avgRt}"
 
     if((avgRtValidation > 0) && (avgRt > avgRtValidation)) {
         echo "Response Time Threshold Violation: ${avgRt} > ${avgRtValidation}"
