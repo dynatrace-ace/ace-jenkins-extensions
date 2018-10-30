@@ -28,7 +28,7 @@ def call(   String scriptName,
     archiveArtifacts artifacts:'*.*/**'
 
     // do post test validation checks
-    sh "$(awk '/summary =/ {print \$15;}' output.txt) >> errorCount.txt"
+    sh "awk '/summary =/ {print \$15;}' output.txt >> errorCount.txt"
     def errorCount=readFile("errorCount.txt").trim()
     if(funcValidation && errorCount > 0) {
         echo "More than 1 functional error"
@@ -36,7 +36,7 @@ def call(   String scriptName,
         return errorCode
     }
 
-    sh "$(awk '/summary =/ {print \$9;}' output.txt) >> avgRt.txt"
+    sh "awk '/summary =/ {print \$9;}' output.txt >> avgRt.txt"
     def avgRt=readFile("avgRt.txt").trim()
     if((avgRtValidation > 0) && (avgRt > avgRtValidation)) {
         echo "Response Time Threshold Violation: ${avgRt} > ${avgRtValidation}"
