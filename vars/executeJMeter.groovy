@@ -52,13 +52,6 @@ def call( Map args )
         echo "Clean results directory: ${resultsDir}"
     }
 
-    // delete result.tlf if exists
-    def resultsFile = new File('./result.tlf')
-    if(resultsFile.exists()) {
-        resultsFile.delete()
-        echo "Deleting file: results.tlf"
-    }
-
     sh "ls -l"
 
     // lets run the test and put the console output to output.txt
@@ -67,7 +60,7 @@ def call( Map args )
     sh "cat output.txt"
 
     // archive the artifacts
-    perfReport percentiles: '0,50,90,100', sourceDataFiles: 'result.tlf'
+    perfReport percentiles: '0,50,90,100', sourceDataFiles: "${resultsDir}.tlf"
     // archiveArtifacts artifacts:'*.*/**'
     archiveArtifacts artifacts:"${resultsDir}/**"
 
