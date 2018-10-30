@@ -21,7 +21,7 @@ def call( Map args )
 {
     // check input arguments
     String scriptName = args.containsKey("scriptName") ? args.scriptName : ""
-    String resultsDir = args.containsKey("resultsDir") ? args.scriptName : "results"
+    String resultsDir = args.containsKey("resultsDir") ? args.resultsDir : "results"
     String serverUrl = args.containsKey("serverUrl") ? args.serverUrl : ""
     int serverPort = args.containsKey("serverPort") ? args.serverPort : 80
     String checkPath = args.containsKey("checkPath") ? args.checkPath : "/health"
@@ -45,10 +45,13 @@ def call( Map args )
     // check results dir exists and is empty
     def resultsFolder = new File(resultsDir)
     if (!resultsFolder.exists()) {
+        echo "Creating results directory"
         resultsFolder.mkdirs()
     } else {
+        echo "Clean results directory"
         FileUtils.cleanDirectory(resultsFolder)
     }
+    sh "ls -l"
 
     // lets run the test and put the console output to output.txt
     echo "Execute the jMeter test and console output goes to output.txt."
