@@ -3,7 +3,9 @@
 
   Returns either 0(=no errors), 1(=func validation failed), 2(=response time validation failed)
 \***************************/
-def call(   String scriptName, 
+def call( Map args ) 
+    
+    /*String scriptName, 
             String serverUrl, 
             int serverPort=80, 
             String checkPath='/health', 
@@ -14,8 +16,28 @@ def call(   String scriptName,
             boolean funcValidation=false, 
             int avgRtValidation=0, 
             int retryOnError=0, 
-            int retryWait=5000)
+            int retryWait=5000*/
 {
+    // check input arguments
+    String scriptName = args.containsKey("scriptName") : args.scriptName : ""
+    String serverUrl = args.containsKey("serverUrl") : args.serverUrl : ""
+    int serverPort = args.containsKey("serverPort") : args.serverPort : 80
+    String checkPath = args.containsKey("checkPath") : args.checkPath : "/health"
+    int vuCount = args.containsKey("vuCount") : args.vuCount : 1
+    int loopCount = args.containsKey("loopCount") : args.loopCount : 1
+    int thinkTime = args.containsKey("thinkTime") : args.thinkTime : 250
+    String LTN = args.containsKey("LTN") : args.LTN : "DTLoadTest"
+    boolean funcValidation = args.containsKey("funcValidation") : args.funcValidation : false
+    int avgRtValidation = args.containsKey("avgRtValidation") : args.avgRtValidation : 0
+    int retryOnError = args.containsKey("retryOnError") : args.retryOnError : 0
+    int retryWait = args.containsKey("retryWait") : args.retryWait : 5000
+
+    // check minimum required params
+    if(serverUrl == "" || scriptName == "") {
+        echo "serverUrl and scriptName are mandatory parameters!"
+        return -1
+    }
+
     int errorCode = 0
 
     // lets run the test and put the console output to output.txt
