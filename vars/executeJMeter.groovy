@@ -65,8 +65,12 @@ def call( Map args )
     archiveArtifacts artifacts:"${resultsDir}/**"
 
     // do post test validation checks
-    sh "awk '/summary =/ {print \$15;}' output.txt >> errorCount.txt"
-    int errorCount=readFile("errorCount.txt").trim().toInteger()
+    sh "awk '/summary =/ {print \$15;}' output.txt > errorCount.txt"
+    //int errorCount=readFile("errorCount.txt").trim().toInteger()
+    int errorCount = 0
+    readFile("errorCount.txt").eachLine { String line ->
+        errorCount += line.toInteger()
+    }
     // DBG: echo "ErrorCount: ${errorCount}"
 
     if(funcValidation && errorCount > 0) {
@@ -75,7 +79,7 @@ def call( Map args )
         return errorCode
     }
 
-    sh "awk '/summary =/ {print \$9;}' output.txt >> avgRt.txt"
+    sh "awk '/summary =/ {print \$9;}' output.txt > avgRt.txt"
     int avgRt=readFile("avgRt.txt").trim().toInteger()
     // DBG: echo "avgRt: ${avgRt}"
 
