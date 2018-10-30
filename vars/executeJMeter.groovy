@@ -45,16 +45,19 @@ def call( Map args )
     // check results dir exists and is empty
     def resultsFolder = new File(resultsDir)
     if (!resultsFolder.exists()) {
-        echo "Creating results directory"
+        echo "Creating results directory: ${resultsDir}"
         resultsFolder.mkdirs()
     } else {
-        echo "Clean results directory"
+        echo "Clean results directory: ${resultsDir}"
         FileUtils.cleanDirectory(resultsFolder)
     }
 
     // delete result.tlf if exists
     def resultsFile = new File('result.tlf')
-    resultsFile.delete()
+    if(resultsFile.exists()) {
+        echo "Deleting file: results.tlf"
+        resultsFile.delete()
+    }
 
     sh "ls -l"
 
