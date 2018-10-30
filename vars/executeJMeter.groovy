@@ -52,7 +52,7 @@ def call( Map args )
 
     // do post test validation checks
     sh "awk '/summary =/ {print \$15;}' output.txt >> errorCount.txt"
-    def errorCount=readFile("errorCount.txt").trim()
+    int errorCount=readFile("errorCount.txt").trim().toInteger()
     // DBG: echo "ErrorCount: ${errorCount}"
 
     if(funcValidation && errorCount > 0) {
@@ -62,7 +62,7 @@ def call( Map args )
     }
 
     sh "awk '/summary =/ {print \$9;}' output.txt >> avgRt.txt"
-    def avgRt=readFile("avgRt.txt").trim()
+    int avgRt=readFile("avgRt.txt").trim().toInteger()
     // DBG: echo "avgRt: ${avgRt}"
 
     if((avgRtValidation > 0) && (avgRt > avgRtValidation)) {
