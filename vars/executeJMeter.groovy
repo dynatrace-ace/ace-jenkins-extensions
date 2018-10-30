@@ -1,3 +1,4 @@
+
 /***************************\
   This function assumes we run on a Jenkins Agent that has JMeter installed
 
@@ -19,18 +20,18 @@ def call( Map args )
             int retryWait=5000*/
 {
     // check input arguments
-    String scriptName = args.containsKey("scriptName") : args.scriptName : ""
-    String serverUrl = args.containsKey("serverUrl") : args.serverUrl : ""
-    int serverPort = args.containsKey("serverPort") : args.serverPort : 80
-    String checkPath = args.containsKey("checkPath") : args.checkPath : "/health"
-    int vuCount = args.containsKey("vuCount") : args.vuCount : 1
-    int loopCount = args.containsKey("loopCount") : args.loopCount : 1
-    int thinkTime = args.containsKey("thinkTime") : args.thinkTime : 250
-    String LTN = args.containsKey("LTN") : args.LTN : "DTLoadTest"
-    boolean funcValidation = args.containsKey("funcValidation") : args.funcValidation : false
-    int avgRtValidation = args.containsKey("avgRtValidation") : args.avgRtValidation : 0
-    int retryOnError = args.containsKey("retryOnError") : args.retryOnError : 0
-    int retryWait = args.containsKey("retryWait") : args.retryWait : 5000
+    String scriptName = args.containsKey("scriptName") ? args.scriptName : ""
+    String serverUrl = args.containsKey("serverUrl") ? args.serverUrl : ""
+    int serverPort = args.containsKey("serverPort") ? args.serverPort : 80
+    String checkPath = args.containsKey("checkPath") ? args.checkPath : "/health"
+    int vuCount = args.containsKey("vuCount") ? args.vuCount : 1
+    int loopCount = args.containsKey("loopCount") ? args.loopCount : 1
+    int thinkTime = args.containsKey("thinkTime") ? args.thinkTime : 250
+    String LTN = args.containsKey("LTN") ? args.LTN : "DTLoadTest"
+    boolean funcValidation = args.containsKey("funcValidation") ? args.funcValidation : false
+    int avgRtValidation = args.containsKey("avgRtValidation") ? args.avgRtValidation : 0
+    int retryOnError = args.containsKey("retryOnError") ? args.retryOnError : 0
+    int retryWait = args.containsKey("retryWait") ? args.retryWait : 5000
 
     // check minimum required params
     if(serverUrl == "" || scriptName == "") {
