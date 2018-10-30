@@ -80,7 +80,7 @@ def call( Map args )
     sh "awk '/summary =/ {print \$9;}' output.txt > avgRt.txt"
     int avgRt = 0
     readFile("avgRt.txt").eachLine { String line ->
-        avgRT = line.toInteger() > avgRT ? line.toInteger() : avgRT
+        avgRt = line.toInteger() > avgRt ? line.toInteger() : avgRt
     }
     echo "avgRt: ${avgRt}"
 
