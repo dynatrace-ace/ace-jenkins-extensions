@@ -3,18 +3,18 @@
 
   Returns either 0(=no errors), 1(=func validation failed), 2(=response time validation failed)
 \***************************/
-def call(   final String scriptName, 
-            final String serverUrl, 
-            final int serverPort=80, 
-            final String checkPath='/health', 
-            final int vuCount=1, 
-            final int loopCount=1, 
-            final int thinkTime=250, 
-            final String LTN='DTLoadTest', 
-            final boolean funcValidation=false, 
-            final int avgRtValidation=0, 
-            final int retryOnError=0, 
-            final int retryWait=5000)
+def call(   String scriptName, 
+            String serverUrl, 
+            int serverPort=80, 
+            String checkPath='/health', 
+            int vuCount=1, 
+            int loopCount=1, 
+            int thinkTime=250, 
+            String LTN='DTLoadTest', 
+            boolean funcValidation=false, 
+            int avgRtValidation=0, 
+            int retryOnError=0, 
+            int retryWait=5000)
 {
     int errorCode = 0
 
