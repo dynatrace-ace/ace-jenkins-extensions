@@ -51,6 +51,11 @@ def call( Map args )
         echo "Clean results directory"
         FileUtils.cleanDirectory(resultsFolder)
     }
+
+    // delete result.tlf if exists
+    def resultsFile = new File('result.tlf')
+    resultsFile.delete()
+
     sh "ls -l"
 
     // lets run the test and put the console output to output.txt
