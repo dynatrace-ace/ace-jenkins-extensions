@@ -61,7 +61,6 @@ def call( Map args )
 
     // archive the artifacts
     perfReport percentiles: '0,50,90,100', sourceDataFiles: "${resultsDir}.tlf"
-    // archiveArtifacts artifacts:'*.*/**'
     archiveArtifacts artifacts:"${resultsDir}/**"
 
     // do post test validation checks
@@ -81,7 +80,7 @@ def call( Map args )
     sh "awk '/summary =/ {print \$9;}' output.txt > avgRt.txt"
     int avgRt = 0
     readFile("avgRt.txt").eachLine { String line ->
-        line.toInteger() > avgRT ? avgRT = line.toInteger()
+        avgRT = line.toInteger() > avgRT ? line.toInteger() : avgRT
     }
     echo "avgRt: ${avgRt}"
 
