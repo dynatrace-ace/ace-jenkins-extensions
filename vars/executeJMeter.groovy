@@ -63,8 +63,10 @@ def call( Map args )
     sh "ls -l ${resultsDir}"
 
     // archive the artifacts
-    perfReport percentiles: '0,50,90,100', sourceDataFiles: "${resultsDir}.tlf"
+    perfReport percentiles: '0,50,90,100', sourceDataFiles: "./${resultsDir}.tlf"
     archiveArtifacts artifacts:"${resultsDir}/**"
+    archiveArtifacts artifacts:"${resultsDir}.tlf"
+    archiveArtifacts artifacts:"output.txt"
 
     // do post test validation checks
     sh "awk '/summary =/ {print \$15;}' output.txt > errorCount.txt"
