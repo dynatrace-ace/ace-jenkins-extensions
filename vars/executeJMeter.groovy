@@ -66,7 +66,7 @@ def call( Map args )
     // archive the artifacts
     perfReport percentiles: '0,50,90,100', sourceDataFiles: "${WORKSPACE}/${resultsDir}_result.tlf"
     archiveArtifacts artifacts:"${resultsDir}/**"
-    archiveArtifacts artifacts:"${resultsDir}.tlf"
+    archiveArtifacts artifacts:"${resultsDir}_result.tlf"
     archiveArtifacts artifacts:"output.txt"
 
     sh "ls -l /var/jenkins_home/jobs/sockshop/jobs/user.performance/builds/${BUILD_NUMBER}/temp"
