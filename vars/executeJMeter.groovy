@@ -57,6 +57,11 @@ def call( Map args )
     sh "/jmeter/bin/jmeter.sh -n -t ./${scriptName} -e -o ${resultsDir} -l ${resultsDir}.tlf -JSERVER_URL='${serverUrl}' -JDT_LTN='${LTN}' -JVUCount='${vuCount}' -JLoopCount='${loopCount}' -JCHECK_PATH='${checkPath}' -JSERVER_PORT='${serverPort}' -JThinkTime='${thinkTime}' > output.txt"                    
     sh "cat output.txt"
 
+    echo "Printing Result directories"
+    sh "pwd"
+    sh "ls -l"
+    sh "ls -l ${resultsDir}"
+
     // archive the artifacts
     perfReport percentiles: '0,50,90,100', sourceDataFiles: "${resultsDir}.tlf"
     archiveArtifacts artifacts:"${resultsDir}/**"
