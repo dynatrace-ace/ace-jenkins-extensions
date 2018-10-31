@@ -57,11 +57,11 @@ def call( Map args )
     sh "/jmeter/bin/jmeter.sh -n -t ./${scriptName} -e -o ${resultsDir} -l ${resultsDir}_result.tlf -JSERVER_URL='${serverUrl}' -JDT_LTN='${LTN}' -JVUCount='${vuCount}' -JLoopCount='${loopCount}' -JCHECK_PATH='${checkPath}' -JSERVER_PORT='${serverPort}' -JThinkTime='${thinkTime}' > output.txt"                    
     sh "cat output.txt"
 
-    echo "Printing Result directories"
-    sh "pwd"
-    sh "ls -l"
-    sh "ls -l ${resultsDir}"
-    echo "${WORKSPACE}"
+    //echo "Printing Result directories"
+    //sh "pwd"
+    //sh "ls -l"
+    //sh "ls -l ${resultsDir}"
+    //echo "${WORKSPACE}"
 
     // archive the artifacts
     perfReport percentiles: '0,50,90,100', sourceDataFiles: "${WORKSPACE}/${resultsDir}_result.tlf"
@@ -69,8 +69,8 @@ def call( Map args )
     archiveArtifacts artifacts:"${resultsDir}_result.tlf"
     archiveArtifacts artifacts:"output.txt"
 
-    sh "ls -l /var/jenkins_home/jobs/sockshop/jobs/user.performance/builds/${BUILD_NUMBER}/temp"
-    sh "ls -l /var/jenkins_home/jobs/sockshop/jobs/user.performance/builds/${BUILD_NUMBER}"
+    // sh "ls -l /var/jenkins_home/jobs/sockshop/jobs/user.performance/builds/${BUILD_NUMBER}/temp"
+    // sh "ls -l /var/jenkins_home/jobs/sockshop/jobs/user.performance/builds/${BUILD_NUMBER}"
 
     // do post test validation checks
     sh "awk '/summary =/ {print \$15;}' output.txt > errorCount.txt"
