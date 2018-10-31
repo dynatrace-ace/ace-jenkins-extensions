@@ -61,9 +61,10 @@ def call( Map args )
     sh "pwd"
     sh "ls -l"
     sh "ls -l ${resultsDir}"
+    echo "${WORKSPACE}"
 
     // archive the artifacts
-    perfReport percentiles: '0,50,90,100', sourceDataFiles: "./${resultsDir}.tlf"
+    perfReport percentiles: '0,50,90,100', sourceDataFiles: "${WORKSPACE}/${resultsDir}.tlf"
     archiveArtifacts artifacts:"${resultsDir}/**"
     archiveArtifacts artifacts:"${resultsDir}.tlf"
     archiveArtifacts artifacts:"output.txt"
