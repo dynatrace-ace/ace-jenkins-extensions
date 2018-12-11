@@ -1,3 +1,5 @@
+import groovy.json.JsonOutput
+
 /***************************\
   This function assumes we run on a Jenkins Agent that has curl command available.
 
@@ -11,7 +13,12 @@ def call( Map args )
     // check input arguments
     String dtTenantUrl = args.containsKey("dtTenantUrl") ? args.dtTenantUrl : ""
     String dtApiToken = args.containsKey("dtApiToken") ? args.dtApiToken : ""
-    String tagRule = args.containsKey("tagRule") ? args.tagRule : ""
+    String tagRule = args.containsKey("tagRule") ? JsonOutput.toJson(args.tagRule) : ""
+
+    //deploymentName
+    //deploymentVersion
+    //deploymentProject
+    //ciBackLink
 
     // check minimum required params
     if(dtTenantUrl == "" || dtApiToken == "") {
