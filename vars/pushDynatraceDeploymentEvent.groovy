@@ -36,13 +36,18 @@ def call( Map args )
     String curlCmd = "curl -X POST \"${dtTenantUrl}/api/v1/events?Api-Token=${dtApiToken}\" -H \"accept: application/json\" -H \"Content-Type: application/json\" -d \"{" 
     curlCmd += " \\\"eventType\\\": \\\"${eventType}\\\", \\\"attachRules\\\": { \\\"tagRule\\\" : [{ \\\"meTypes\\\" : [\\\"${tagRule[0].meTypes[0].meType}\\\"],"
 
-    curlCmd += " \\\"tags\\\" : [ { \\\"context\\\" : \\\"${tagRule[0].tags[0].context}\\\", \\\"key\\\" : \\\"${tagRule[0].tags[0].key}\\\", \\\"value\\\" : \\\"${tagRule[0].tags[0].value}\\\" }, { \\\"context\\\" : \\\"${tagRule[0].tags[1].context}\\\", \\\"key\\\" : \\\"${tagRule[0].tags[1].key}\\\", \\\"value\\\" : \\\"${tagRule[0].tags[1].value}\\\" } ] }] },"
-    
+    curlCmd += " \\\"tags\\\" : [ "
+    sh "echo ${tagRule[0].tags.size()}"
+    tagRule[0].tags.eachWithIndex { tag, i ->
+        curlCmd += "{ \\\"context\\\" : \\\"${tag.context}\\\", \\\"key\\\" : \\\"${tag.key}\\\", \\\"value\\\" : \\\"${tag.value}\\\" },"
+    }
+    curlCmd += " },"
+
     curlCmd += " \\\"deploymentName\\\":\\\"${deploymentName}\\\", \\\"deploymentVersion\\\":\\\"${deploymentVersion}\\\", \\\"deploymentProject\\\":\\\"${deploymentProject}\\\", \\\"ciBackLink\\\":\\\"${ciBackLink}\\\", \\\"source\\\":\\\"Jenkins\\\","
     curlCmd += " \\\"customProperties\\\": { \\\"Jenkins Build Number\\\": \\\"${env.BUILD_ID}\\\",  \\\"Git commit\\\": \\\"${env.GIT_COMMIT}\\\" }"
     curlCmd += " }\" "
 
-    sh "echo ${curlCmd}"
+    //sh "echo ${curlCmd}"
 
     sh "${curlCmd}"
 
