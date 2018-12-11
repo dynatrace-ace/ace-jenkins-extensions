@@ -1,7 +1,0 @@
-## puseEvent
-Used to push a Deployment or Configuration Event to Dynatrace
-
-### *usage:*
-errorCode=pushEvent(TBD)
-if(errorCode > 0)
-  error "Pushing event to Dynatrace failed"
