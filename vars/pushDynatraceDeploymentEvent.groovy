@@ -33,15 +33,21 @@ def call( Map args )
     // lets push the event
     //sh "curl -X POST \"${dtTenantUrl}/api/v1/events?Api-Token=${dtApiToken}\" -H \"accept: application/json\" -H \"Content-Type: application/json\" -d \"{ \\\"eventType\\\": \\\"${eventType}\\\", \\\"attachRules\\\": { \\\"tagRule\\\" : [{ \\\"meTypes\\\" : [\\\"${tagRule[0].meTypes[0].meType}\\\"], \\\"tags\\\" : [ { \\\"context\\\" : \\\"${tagRule[0].tags[0].context}\\\", \\\"key\\\" : \\\"${tagRule[0].tags[0].key}\\\", \\\"value\\\" : \\\"${tagRule[0].tags[0].value}\\\" }, { \\\"context\\\" : \\\"${tagRule[0].tags[1].context}\\\", \\\"key\\\" : \\\"${tagRule[0].tags[1].key}\\\", \\\"value\\\" : \\\"${tagRule[0].tags[1].value}\\\" } ] }] }, \\\"deploymentName\\\":\\\"${deploymentName}\\\", \\\"deploymentVersion\\\":\\\"${deploymentVersion}\\\", \\\"deploymentProject\\\":\\\"${deploymentProject}\\\", \\\"ciBackLink\\\":\\\"${ciBackLink}\\\", \\\"source\\\":\\\"Jenkins\\\", \\\"customProperties\\\": { \\\"Jenkins Build Number\\\": \\\"${env.BUILD_ID}\\\",  \\\"Git commit\\\": \\\"${env.GIT_COMMIT}\\\" } }\" "
 
+    int numberOfTags = tagRule[0].tags.size()
+
     String curlCmd = "curl -X POST \"${dtTenantUrl}/api/v1/events?Api-Token=${dtApiToken}\" -H \"accept: application/json\" -H \"Content-Type: application/json\" -d \"{" 
-    curlCmd += " \\\"eventType\\\": \\\"${eventType}\\\", \\\"attachRules\\\": { \\\"tagRule\\\" : [{ \\\"meTypes\\\" : [\\\"${tagRule[0].meTypes[0].meType}\\\"],"
+    curlCmd += " \\\"eventType\\\": \\\"${eventType}\\\","
+    curlCmd += " \\\"attachRules\\\": { \\\"tagRule\\\" : [{ \\\"meTypes\\\" : [\\\"${tagRule[0].meTypes[0].meType}\\\"],"
 
     curlCmd += " \\\"tags\\\" : [ "
-    sh "echo ${tagRule[0].tags.size()}"
+    
     tagRule[0].tags.eachWithIndex { tag, i ->
-        curlCmd += "{ \\\"context\\\" : \\\"${tag.context}\\\", \\\"key\\\" : \\\"${tag.key}\\\", \\\"value\\\" : \\\"${tag.value}\\\" },"
+        curlCmd += "{ \\\"context\\\" : \\\"${tag.context}\\\", \\\"key\\\" : \\\"${tag.key}\\\", \\\"value\\\" : \\\"${tag.value}\\\" }"
+        if(i < (numberOfTags - 1)) {
+            curlCmd += ", "
+        }
     }
-    curlCmd += " },"
+    curlCmd += " ] }] },"
 
     curlCmd += " \\\"deploymentName\\\":\\\"${deploymentName}\\\", \\\"deploymentVersion\\\":\\\"${deploymentVersion}\\\", \\\"deploymentProject\\\":\\\"${deploymentProject}\\\", \\\"ciBackLink\\\":\\\"${ciBackLink}\\\", \\\"source\\\":\\\"Jenkins\\\","
     curlCmd += " \\\"customProperties\\\": { \\\"Jenkins Build Number\\\": \\\"${env.BUILD_ID}\\\",  \\\"Git commit\\\": \\\"${env.GIT_COMMIT}\\\" }"
