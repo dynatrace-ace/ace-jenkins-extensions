@@ -30,12 +30,19 @@ def call( Map args )
 
     int errorCode = 0
 
-    sh "echo ${tagRule[0].meTypes[0].meType}"
-    sh "echo ${tagRule[0].tags[0].value}"
-    sh "echo ${tagRule[0].tags[1].value}"
-
     // lets push the event
-    sh "curl -X POST \"${dtTenantUrl}/api/v1/events?Api-Token=${dtApiToken}\" -H \"accept: application/json\" -H \"Content-Type: application/json\" -d \"{ \\\"eventType\\\": \\\"${eventType}\\\", \\\"attachRules\\\": { \\\"tagRule\\\" : [{ \\\"meTypes\\\" : [\\\"${tagRule[0].meTypes[0].meType}\\\"], \\\"tags\\\" : [ { \\\"context\\\" : \\\"${tagRule[0].tags[0].context}\\\", \\\"key\\\" : \\\"${tagRule[0].tags[0].key}\\\", \\\"value\\\" : \\\"${tagRule[0].tags[0].value}\\\" }, { \\\"context\\\" : \\\"${tagRule[0].tags[1].context}\\\", \\\"key\\\" : \\\"${tagRule[0].tags[1].key}\\\", \\\"value\\\" : \\\"${tagRule[0].tags[1].value}\\\" } ] }] }, \\\"deploymentName\\\":\\\"${deploymentName}\\\", \\\"deploymentVersion\\\":\\\"${deploymentVersion}\\\", \\\"deploymentProject\\\":\\\"${deploymentProject}\\\", \\\"ciBackLink\\\":\\\"${ciBackLink}\\\", \\\"source\\\":\\\"Jenkins\\\", \\\"customProperties\\\": { \\\"Jenkins Build Number\\\": \\\"${env.BUILD_ID}\\\",  \\\"Git commit\\\": \\\"${env.GIT_COMMIT}\\\" } }\" "
-                     
+    //sh "curl -X POST \"${dtTenantUrl}/api/v1/events?Api-Token=${dtApiToken}\" -H \"accept: application/json\" -H \"Content-Type: application/json\" -d \"{ \\\"eventType\\\": \\\"${eventType}\\\", \\\"attachRules\\\": { \\\"tagRule\\\" : [{ \\\"meTypes\\\" : [\\\"${tagRule[0].meTypes[0].meType}\\\"], \\\"tags\\\" : [ { \\\"context\\\" : \\\"${tagRule[0].tags[0].context}\\\", \\\"key\\\" : \\\"${tagRule[0].tags[0].key}\\\", \\\"value\\\" : \\\"${tagRule[0].tags[0].value}\\\" }, { \\\"context\\\" : \\\"${tagRule[0].tags[1].context}\\\", \\\"key\\\" : \\\"${tagRule[0].tags[1].key}\\\", \\\"value\\\" : \\\"${tagRule[0].tags[1].value}\\\" } ] }] }, \\\"deploymentName\\\":\\\"${deploymentName}\\\", \\\"deploymentVersion\\\":\\\"${deploymentVersion}\\\", \\\"deploymentProject\\\":\\\"${deploymentProject}\\\", \\\"ciBackLink\\\":\\\"${ciBackLink}\\\", \\\"source\\\":\\\"Jenkins\\\", \\\"customProperties\\\": { \\\"Jenkins Build Number\\\": \\\"${env.BUILD_ID}\\\",  \\\"Git commit\\\": \\\"${env.GIT_COMMIT}\\\" } }\" "
+
+    String curlCmd = "curl -X POST \"${dtTenantUrl}/api/v1/events?Api-Token=${dtApiToken}\" -H \"accept: application/json\" -H \"Content-Type: application/json\" -d \"{" 
+    curlCmd += " \\\"eventType\\\": \\\"${eventType}\\\", \\\"attachRules\\\": { \\\"tagRule\\\" : [{ \\\"meTypes\\\" : [\\\"${tagRule[0].meTypes[0].meType}\\\"],"
+    curlCmd += " \\\"tags\\\" : [ { \\\"context\\\" : \\\"${tagRule[0].tags[0].context}\\\", \\\"key\\\" : \\\"${tagRule[0].tags[0].key}\\\", \\\"value\\\" : \\\"${tagRule[0].tags[0].value}\\\" }, { \\\"context\\\" : \\\"${tagRule[0].tags[1].context}\\\", \\\"key\\\" : \\\"${tagRule[0].tags[1].key}\\\", \\\"value\\\" : \\\"${tagRule[0].tags[1].value}\\\" } ] }] },"
+    curlCmd += " \\\"deploymentName\\\":\\\"${deploymentName}\\\", \\\"deploymentVersion\\\":\\\"${deploymentVersion}\\\", \\\"deploymentProject\\\":\\\"${deploymentProject}\\\", \\\"ciBackLink\\\":\\\"${ciBackLink}\\\", \\\"source\\\":\\\"Jenkins\\\","
+    curlCmd += " \\\"customProperties\\\": { \\\"Jenkins Build Number\\\": \\\"${env.BUILD_ID}\\\",  \\\"Git commit\\\": \\\"${env.GIT_COMMIT}\\\" }"
+    curlCmd += " }\" "
+
+    sh "echo ${curlCmd}"
+
+    sh "${curlCmd}"
+
     return errorCode
 }
