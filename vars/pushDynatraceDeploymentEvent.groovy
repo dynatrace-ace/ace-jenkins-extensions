@@ -26,6 +26,7 @@ def call( Map args )
     sh "echo ${tagRule}"
 
     // lets push the event
+    /*
     String curlCmd = "curl -X POST \"${dtTenantUrl}/api/v1/events?Api-Token=${dtApiToken}\" -H \"accept: application/json\" -H \"Content-Type: application/json\" -d \"
         {   \\\"eventType\\\":\\\"${eventType}\\\", 
             \\\"attachRules\\\": { 
@@ -39,7 +40,8 @@ def call( Map args )
                 \\\"Jenkins Build Number\\\": \\\"${env.BUILD_ID}\\\",
                 \\\"Git commit\\\": \\\"${env.GIT_COMMIT}\\\" } 
         }\" "
-    
+    */
+    String curlCmd = "curl -X POST \"${dtTenantUrl}/api/v1/events?Api-Token=${dtApiToken}\" -H \"accept: application/json\" -H \"Content-Type: application/json\" -d \" { \\\"eventType\\\":\\\"${eventType}\\\",\\\"attachRules\\\": { \\\"tagRule\\\" : ${tagRule} },\\\"deploymentName\\\":\\\"${env.JOB_NAME}\\\",\\\"deploymentVersion\\\":\\\"${env.VERSION}\\\",\\\"deploymentProject\\\":\\\"\\\",\\\"ciBackLink\\\":\\\"${env.BUILD_URL}\\\",\\\"source\\\":\\\"Jenkins\\\",\\\"customProperties\\\": { \\\"Jenkins Build Number\\\": \\\"${env.BUILD_ID}\\\",\\\"Git commit\\\": \\\"${env.GIT_COMMIT}\\\" } }\" "
     sh "echo ${curlCmd}"
 
     return errorCode
