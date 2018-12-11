@@ -15,10 +15,10 @@ def call( Map args )
     String dtApiToken = args.containsKey("dtApiToken") ? args.dtApiToken : "${DT_API_TOKEN}"
     String tagRule = args.containsKey("tagRule") ? args.tagRule : ""
     
-    String deploymentName = args.containsKey("deploymentName") ? args.deploymentName : ""
-    String deploymentVersion = args.containsKey("deploymentVersion") ? args.deploymentVersion : ""
+    String deploymentName = args.containsKey("deploymentName") ? args.deploymentName : "${env.JOB_NAME}"
+    String deploymentVersion = args.containsKey("deploymentVersion") ? args.deploymentVersion : "${env.VERSION}"
     String deploymentProject = args.containsKey("deploymentProject") ? args.deploymentProject : ""
-    String ciBackLink = args.containsKey("ciBackLink") ? args.ciBackLink : ""
+    String ciBackLink = args.containsKey("ciBackLink") ? args.ciBackLink : "${env.BUILD_URL}"
 
     // check minimum required params
     if(tagRule == "" ) {
@@ -30,9 +30,7 @@ def call( Map args )
 
     int errorCode = 0
 
-    def json = JsonOutput.toJson([name: 'John Doe', age: 42])
-    json = JsonOutput.prettyPrint(json)
-    sh "echo ${json}"
+    sh "echo ${tagRule}"
 
     // lets push the event
     sh "curl -X POST \"${dtTenantUrl}/api/v1/events?Api-Token=${dtApiToken}\" -H \"accept: application/json\" -H \"Content-Type: application/json\" -d \"{ \\\"eventType\\\": \\\"${eventType}\\\", \\\"attachRules\\\": { \\\"tagRule\\\" : ${tagRule} }, \\\"deploymentName\\\":\\\"${env.JOB_NAME}\\\", \\\"deploymentVersion\\\":\\\"${env.VERSION}\\\", \\\"deploymentProject\\\":\\\"\\\", \\\"ciBackLink\\\":\\\"${env.BUILD_URL}\\\", \\\"source\\\":\\\"Jenkins\\\", \\\"customProperties\\\": { \\\"Jenkins Build Number\\\": \\\"${env.BUILD_ID}\\\",  \\\"Git commit\\\": \\\"${env.GIT_COMMIT}\\\" } }\" "
