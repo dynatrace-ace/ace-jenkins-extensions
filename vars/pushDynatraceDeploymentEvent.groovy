@@ -30,7 +30,8 @@ def call( Map args )
 
     int errorCode = 0
 
-    def json = JsonOutput.prettyPrint([name: 'John Doe', age: 42])
+    def json = JsonOutput.toJson([name: 'John Doe', age: 42])
+    json = JsonOutput.prettyPrint(json)
     sh "echo ${output}"
 
     // lets push the event
