@@ -14,11 +14,11 @@ def call( Map args )
     String dtTenantUrl = args.containsKey("dtTenantUrl") ? args.dtTenantUrl : "${DT_TENANT_URL}"
     String dtApiToken = args.containsKey("dtApiToken") ? args.dtApiToken : "${DT_API_TOKEN}"
     String tagRule = args.containsKey("tagRule") ? args.tagRule : ""
-
-    //deploymentName
-    //deploymentVersion
-    //deploymentProject
-    //ciBackLink
+    
+    String deploymentName = args.containsKey("deploymentName") ? args.deploymentName : ""
+    String deploymentVersion = args.containsKey("deploymentVersion") ? args.deploymentVersion : ""
+    String deploymentProject = args.containsKey("deploymentProject") ? args.deploymentProject : ""
+    String ciBackLink = args.containsKey("ciBackLink") ? args.ciBackLink : ""
 
     // check minimum required params
     if(tagRule == "" ) {
@@ -32,7 +32,7 @@ def call( Map args )
 
     def json = JsonOutput.toJson([name: 'John Doe', age: 42])
     json = JsonOutput.prettyPrint(json)
-    sh "echo ${output}"
+    sh "echo ${json}"
 
     // lets push the event
     sh "curl -X POST \"${dtTenantUrl}/api/v1/events?Api-Token=${dtApiToken}\" -H \"accept: application/json\" -H \"Content-Type: application/json\" -d \"{ \\\"eventType\\\": \\\"${eventType}\\\", \\\"attachRules\\\": { \\\"tagRule\\\" : ${tagRule} }, \\\"deploymentName\\\":\\\"${env.JOB_NAME}\\\", \\\"deploymentVersion\\\":\\\"${env.VERSION}\\\", \\\"deploymentProject\\\":\\\"\\\", \\\"ciBackLink\\\":\\\"${env.BUILD_URL}\\\", \\\"source\\\":\\\"Jenkins\\\", \\\"customProperties\\\": { \\\"Jenkins Build Number\\\": \\\"${env.BUILD_ID}\\\",  \\\"Git commit\\\": \\\"${env.GIT_COMMIT}\\\" } }\" "
