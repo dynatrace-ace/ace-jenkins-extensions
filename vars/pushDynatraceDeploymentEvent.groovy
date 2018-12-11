@@ -13,7 +13,7 @@ def call( Map args )
     // check input arguments
     String dtTenantUrl = args.containsKey("dtTenantUrl") ? args.dtTenantUrl : "${DT_TENANT_URL}"
     String dtApiToken = args.containsKey("dtApiToken") ? args.dtApiToken : "${DT_API_TOKEN}"
-    String tagRule = args.containsKey("tagRule") ? JsonOutput.toJson(args.tagRule) : ""
+    String tagRule = args.containsKey("tagRule") ? args.tagRule : ""
 
     //deploymentName
     //deploymentVersion
@@ -25,11 +25,12 @@ def call( Map args )
         echo "Tag rule is a mandatory parameter!"
         return -1
     }
-
+ 
     String eventType = "CUSTOM_DEPLOYMENT"
 
     int errorCode = 0
 
+    tagRule = JsonOutput.toJson(tagRule)
     sh "echo ${tagRule}"
 
     // lets push the event
