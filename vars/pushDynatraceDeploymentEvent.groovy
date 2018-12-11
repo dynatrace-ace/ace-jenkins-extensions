@@ -11,8 +11,8 @@ def call( Map args )
             String dtApiToken*/
 {
     // check input arguments
-    String dtTenantUrl = args.containsKey("dtTenantUrl") ? args.dtTenantUrl : ""
-    String dtApiToken = args.containsKey("dtApiToken") ? args.dtApiToken : ""
+    String dtTenantUrl = args.containsKey("dtTenantUrl") ? args.dtTenantUrl : "${DT_TENANT_URL}"
+    String dtApiToken = args.containsKey("dtApiToken") ? args.dtApiToken : "${DT_API_TOKEN}"
     String tagRule = args.containsKey("tagRule") ? JsonOutput.toJson(args.tagRule) : ""
 
     //deploymentName
@@ -21,8 +21,8 @@ def call( Map args )
     //ciBackLink
 
     // check minimum required params
-    if(dtTenantUrl == "" || dtApiToken == "") {
-        echo "<Dynatrace Tenant Url> and <Dynatrace API Token> are mandatory parameters!"
+    if(tagRule == "" ) {
+        echo "Tag rule is a mandatory parameter!"
         return -1
     }
 
