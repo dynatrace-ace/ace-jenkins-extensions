@@ -13,7 +13,7 @@ def call( Map args )
     // check input arguments
     String dtTenantUrl = args.containsKey("dtTenantUrl") ? args.dtTenantUrl : "${DT_TENANT_URL}"
     String dtApiToken = args.containsKey("dtApiToken") ? args.dtApiToken : "${DT_API_TOKEN}"
-    String tagRule = args.containsKey("tagRule") ? args.tagRule : ""
+    def tagRule = args.containsKey("tagRule") ? args.tagRule : ""
     
     String deploymentName = args.containsKey("deploymentName") ? args.deploymentName : "${env.JOB_NAME}"
     String deploymentVersion = args.containsKey("deploymentVersion") ? args.deploymentVersion : "${env.VERSION}"
@@ -30,7 +30,7 @@ def call( Map args )
 
     int errorCode = 0
 
-    sh "echo ${tagRule}"
+    sh "echo ${tagRule[0].meTypes[0]}"
 
     // lets push the event
     sh "curl -X POST \"${dtTenantUrl}/api/v1/events?Api-Token=${dtApiToken}\" -H \"accept: application/json\" -H \"Content-Type: application/json\" -d \"{ \\\"eventType\\\": \\\"${eventType}\\\", \\\"attachRules\\\": { \\\"tagRule\\\" : ${tagRule} }, \\\"deploymentName\\\":\\\"${env.JOB_NAME}\\\", \\\"deploymentVersion\\\":\\\"${env.VERSION}\\\", \\\"deploymentProject\\\":\\\"\\\", \\\"ciBackLink\\\":\\\"${env.BUILD_URL}\\\", \\\"source\\\":\\\"Jenkins\\\", \\\"customProperties\\\": { \\\"Jenkins Build Number\\\": \\\"${env.BUILD_ID}\\\",  \\\"Git commit\\\": \\\"${env.GIT_COMMIT}\\\" } }\" "
