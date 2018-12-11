@@ -7,8 +7,17 @@ import groovy.json.JsonOutput
 \***************************/
 def call( Map args ) 
     
-    /*String dtTenantUrl, 
-            String dtApiToken*/
+    /*  String dtTenantUrl, 
+        String dtTenantUrl 
+        String dtApiToken 
+        def tagRule 
+        String deploymentName 
+        String deploymentVersion 
+        String deploymentProject
+        String ciBackLink 
+        String buildId 
+        String gitCommitId 
+    */
 {
     // check input arguments
     String dtTenantUrl = args.containsKey("dtTenantUrl") ? args.dtTenantUrl : "${DT_TENANT_URL}"
@@ -20,6 +29,9 @@ def call( Map args )
     String deploymentProject = args.containsKey("deploymentProject") ? args.deploymentProject : ""
     String ciBackLink = args.containsKey("ciBackLink") ? args.ciBackLink : "${env.BUILD_URL}"
 
+    String buildId = args.containsKey("buildId") ? args.buildId : "${env.BUILD_ID}"
+    String gitCommitId = args.containsKey("gitCommitId") ? args.gitCommitId : "${env.GIT_COMMIT}"
+
     // check minimum required params
     if(tagRule == "" ) {
         echo "tagRule is a mandatory parameter!"
@@ -30,9 +42,7 @@ def call( Map args )
 
     int errorCode = 0
 
-    // lets push the event
-    //sh "curl -X POST \"${dtTenantUrl}/api/v1/events?Api-Token=${dtApiToken}\" -H \"accept: application/json\" -H \"Content-Type: application/json\" -d \"{ \\\"eventType\\\": \\\"${eventType}\\\", \\\"attachRules\\\": { \\\"tagRule\\\" : [{ \\\"meTypes\\\" : [\\\"${tagRule[0].meTypes[0].meType}\\\"], \\\"tags\\\" : [ { \\\"context\\\" : \\\"${tagRule[0].tags[0].context}\\\", \\\"key\\\" : \\\"${tagRule[0].tags[0].key}\\\", \\\"value\\\" : \\\"${tagRule[0].tags[0].value}\\\" }, { \\\"context\\\" : \\\"${tagRule[0].tags[1].context}\\\", \\\"key\\\" : \\\"${tagRule[0].tags[1].key}\\\", \\\"value\\\" : \\\"${tagRule[0].tags[1].value}\\\" } ] }] }, \\\"deploymentName\\\":\\\"${deploymentName}\\\", \\\"deploymentVersion\\\":\\\"${deploymentVersion}\\\", \\\"deploymentProject\\\":\\\"${deploymentProject}\\\", \\\"ciBackLink\\\":\\\"${ciBackLink}\\\", \\\"source\\\":\\\"Jenkins\\\", \\\"customProperties\\\": { \\\"Jenkins Build Number\\\": \\\"${env.BUILD_ID}\\\",  \\\"Git commit\\\": \\\"${env.GIT_COMMIT}\\\" } }\" "
-
+    // build the curl command
     int numberOfTags = tagRule[0].tags.size()
 
     String curlCmd = "curl -X POST \"${dtTenantUrl}/api/v1/events?Api-Token=${dtApiToken}\" -H \"accept: application/json\" -H \"Content-Type: application/json\" -d \"{" 
@@ -40,21 +50,17 @@ def call( Map args )
     curlCmd += " \\\"attachRules\\\": { \\\"tagRule\\\" : [{ \\\"meTypes\\\" : [\\\"${tagRule[0].meTypes[0].meType}\\\"],"
 
     curlCmd += " \\\"tags\\\" : [ "
-    
     tagRule[0].tags.eachWithIndex { tag, i ->
         curlCmd += "{ \\\"context\\\" : \\\"${tag.context}\\\", \\\"key\\\" : \\\"${tag.key}\\\", \\\"value\\\" : \\\"${tag.value}\\\" }"
-        if(i < (numberOfTags - 1)) {
-            curlCmd += ", "
-        }
+        if(i < (numberOfTags - 1)) { curlCmd += ", " }
     }
     curlCmd += " ] }] },"
 
     curlCmd += " \\\"deploymentName\\\":\\\"${deploymentName}\\\", \\\"deploymentVersion\\\":\\\"${deploymentVersion}\\\", \\\"deploymentProject\\\":\\\"${deploymentProject}\\\", \\\"ciBackLink\\\":\\\"${ciBackLink}\\\", \\\"source\\\":\\\"Jenkins\\\","
-    curlCmd += " \\\"customProperties\\\": { \\\"Jenkins Build Number\\\": \\\"${env.BUILD_ID}\\\",  \\\"Git commit\\\": \\\"${env.GIT_COMMIT}\\\" }"
+    curlCmd += " \\\"customProperties\\\": { \\\"Jenkins Build Number\\\": \\\"${buildId}\\\",  \\\"Git commit\\\": \\\"${gitCommitId}\\\" }"
     curlCmd += " }\" "
 
-    //sh "echo ${curlCmd}"
-
+    // push the event
     sh "${curlCmd}"
 
     return errorCode
