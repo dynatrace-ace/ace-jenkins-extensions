@@ -29,7 +29,7 @@ def call( Map args )
     String deploymentProject = args.containsKey("deploymentProject") ? args.deploymentProject : ""
     String ciBackLink = args.containsKey("ciBackLink") ? args.ciBackLink : "${env.BUILD_URL}"
 
-    def customProperties = args.containsKey("customProperties") ? args.customProperties : [ properties : [] ]
+    def customProperties = args.containsKey("customProperties") ? args.customProperties : [ ]
 
     // check minimum required params
     if(tagRule == "" ) {
@@ -43,7 +43,7 @@ def call( Map args )
 
     // build the curl command
     int numberOfTags = tagRule[0].tags.size()
-    int numberOfProperties = customProperties.properties.size()
+    int numberOfProperties = customProperties.size()
 
     // set Dynatrace URL, API Token and Event Type.
     String curlCmd = "curl -X POST \"${dtTenantUrl}/api/v1/events?Api-Token=${dtApiToken}\" -H \"accept: application/json\" -H \"Content-Type: application/json\" -d \"{" 
@@ -63,10 +63,9 @@ def call( Map args )
     
     // set custom properties
     curlCmd += " \\\"customProperties\\\": { "
-    customProperties.properties.eachWithIndex { property, i ->
-        sh "echo ${property.key}"
+    customProperties.eachWithIndex { property, i ->
         curlCmd += "\\\"${property.key}\\\": \\\"${property.value}\\\""
-        if(i < (numberOfTags - 1)) { curlCmd += ", " }
+        if(i < (numberOfProperties - 1)) { curlCmd += ", " }
     }
     curlCmd += "} }\" "
 

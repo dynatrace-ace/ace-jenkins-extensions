@@ -8,15 +8,14 @@ import groovy.json.JsonOutput
 def call( Map args ) 
     
     /*  String dtTenantUrl, 
-        String dtTenantUrl 
         String dtApiToken 
         def tagRule 
-        String deploymentName 
-        String deploymentVersion 
-        String deploymentProject
-        String ciBackLink 
-        String buildId 
-        String gitCommitId 
+
+        String description 
+        String source 
+        String configuration
+
+        def customProperties
     */
 {
     // check input arguments
@@ -28,7 +27,7 @@ def call( Map args )
     String source = args.containsKey("source") ? args.source : ""
     String configuration = args.containsKey("configuration") ? args.configuration : ""
 
-    String remediationAction = args.containsKey("remediationAction") ? args.remediationAction : ""
+    def customProperties = args.containsKey("customProperties") ? args.customProperties : [ properties : [] ]
 
     // check minimum required params
     if(tagRule == "" ) {
@@ -42,11 +41,14 @@ def call( Map args )
 
     // build the curl command
     int numberOfTags = tagRule[0].tags.size()
+    int numberOfProperties = customProperties.properties.size()
 
+    // set Dynatrace URL, API Token and Event Type.
     String curlCmd = "curl -X POST \"${dtTenantUrl}/api/v1/events?Api-Token=${dtApiToken}\" -H \"accept: application/json\" -H \"Content-Type: application/json\" -d \"{" 
     curlCmd += " \\\"eventType\\\": \\\"${eventType}\\\","
     curlCmd += " \\\"attachRules\\\": { \\\"tagRule\\\" : [{ \\\"meTypes\\\" : [\\\"${tagRule[0].meTypes[0].meType}\\\"],"
 
+    // attach tag rules
     curlCmd += " \\\"tags\\\" : [ "
     tagRule[0].tags.eachWithIndex { tag, i ->
         curlCmd += "{ \\\"context\\\" : \\\"${tag.context}\\\", \\\"key\\\" : \\\"${tag.key}\\\", \\\"value\\\" : \\\"${tag.value}\\\" }"
@@ -54,9 +56,16 @@ def call( Map args )
     }
     curlCmd += " ] }] },"
 
+    // set description, source, configuration
     curlCmd += " \\\"description\\\":\\\"${description}\\\", \\\"source\\\":\\\"${source}\\\", \\\"configuration\\\":\\\"${configuration}\\\", "
-    curlCmd += " \\\"customProperties\\\": { \\\"Remediation Action\\\": \\\"${remediationAction}\\\" }"
-    curlCmd += " }\" "
+
+    // set custom properties
+    curlCmd += " \\\"customProperties\\\": { "
+    customProperties.properties.eachWithIndex { property, i ->
+        curlCmd += "\\\"${property.key}\\\": \\\"${property.value}\\\""
+        if(i < (numberOfProperties - 1)) { curlCmd += ", " }
+    }
+    curlCmd += "} }\" "
 
     // push the event
     sh "${curlCmd}"      
