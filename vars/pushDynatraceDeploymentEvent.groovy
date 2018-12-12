@@ -29,7 +29,7 @@ def call( Map args )
     String deploymentProject = args.containsKey("deploymentProject") ? args.deploymentProject : ""
     String ciBackLink = args.containsKey("ciBackLink") ? args.ciBackLink : "${env.BUILD_URL}"
 
-    String customProperties = args.containsKey("customProperties") ? args.customProperties : [ properties : [] ]
+    def customProperties = args.containsKey("customProperties") ? args.customProperties : [ properties : [] ]
 
     // check minimum required params
     if(tagRule == "" ) {
@@ -45,10 +45,12 @@ def call( Map args )
     int numberOfTags = tagRule[0].tags.size()
     int numberOfProperties = customProperties.properties.size()
 
+    // set Dynatrace URL, API Token and Event Type.
     String curlCmd = "curl -X POST \"${dtTenantUrl}/api/v1/events?Api-Token=${dtApiToken}\" -H \"accept: application/json\" -H \"Content-Type: application/json\" -d \"{" 
     curlCmd += " \\\"eventType\\\": \\\"${eventType}\\\","
     curlCmd += " \\\"attachRules\\\": { \\\"tagRule\\\" : [{ \\\"meTypes\\\" : [\\\"${tagRule[0].meTypes[0].meType}\\\"],"
 
+    // attach tag rules
     curlCmd += " \\\"tags\\\" : [ "
     tagRule[0].tags.eachWithIndex { tag, i ->
         curlCmd += "{ \\\"context\\\" : \\\"${tag.context}\\\", \\\"key\\\" : \\\"${tag.key}\\\", \\\"value\\\" : \\\"${tag.value}\\\" }"
@@ -56,8 +58,10 @@ def call( Map args )
     }
     curlCmd += " ] }] },"
 
+    // set deploymentName, deploymentVersion, deploymentProject, ciBackLink
     curlCmd += " \\\"deploymentName\\\":\\\"${deploymentName}\\\", \\\"deploymentVersion\\\":\\\"${deploymentVersion}\\\", \\\"deploymentProject\\\":\\\"${deploymentProject}\\\", \\\"ciBackLink\\\":\\\"${ciBackLink}\\\", \\\"source\\\":\\\"Jenkins\\\","
     
+    // set custom properties
     //curlCmd += " \\\"customProperties\\\": { \\\"Jenkins Build Number\\\": \\\"${buildId}\\\",  \\\"Git commit\\\": \\\"${gitCommitId}\\\" }"
     
     customProperties.properties.eachWithIndex { property, i ->
