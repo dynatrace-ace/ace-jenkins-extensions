@@ -58,7 +58,7 @@ def call( Map args )
 
     curlCmd += " \\\"deploymentName\\\":\\\"${deploymentName}\\\", \\\"deploymentVersion\\\":\\\"${deploymentVersion}\\\", \\\"deploymentProject\\\":\\\"${deploymentProject}\\\", \\\"ciBackLink\\\":\\\"${ciBackLink}\\\", \\\"source\\\":\\\"Jenkins\\\","
     
-    curlCmd += " \\\"customProperties\\\": { \\\"Jenkins Build Number\\\": \\\"${buildId}\\\",  \\\"Git commit\\\": \\\"${gitCommitId}\\\" }"
+    //curlCmd += " \\\"customProperties\\\": { \\\"Jenkins Build Number\\\": \\\"${buildId}\\\",  \\\"Git commit\\\": \\\"${gitCommitId}\\\" }"
     
     customProperties.properties.eachWithIndex { property, i ->
         sh "echo ${property.key}"
