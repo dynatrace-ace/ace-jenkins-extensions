@@ -8,15 +8,15 @@ import groovy.json.JsonOutput
 def call( Map args ) 
     
     /*  String dtTenantUrl, 
-        String dtTenantUrl 
         String dtApiToken 
         def tagRule 
+
         String deploymentName 
         String deploymentVersion 
         String deploymentProject
         String ciBackLink 
-        String buildId 
-        String gitCommitId 
+
+        def customProperties
     */
 {
     // check input arguments
@@ -62,13 +62,13 @@ def call( Map args )
     curlCmd += " \\\"deploymentName\\\":\\\"${deploymentName}\\\", \\\"deploymentVersion\\\":\\\"${deploymentVersion}\\\", \\\"deploymentProject\\\":\\\"${deploymentProject}\\\", \\\"ciBackLink\\\":\\\"${ciBackLink}\\\", \\\"source\\\":\\\"Jenkins\\\","
     
     // set custom properties
-    //curlCmd += " \\\"customProperties\\\": { \\\"Jenkins Build Number\\\": \\\"${buildId}\\\",  \\\"Git commit\\\": \\\"${gitCommitId}\\\" }"
-    
+    curlCmd += " \\\"customProperties\\\": { "
     customProperties.properties.eachWithIndex { property, i ->
         sh "echo ${property.key}"
+        curlCmd += "\\\"${property.key}\\\": \\\"${property.value}\\\""
+        if(i < (numberOfTags - 1)) { curlCmd += ", " }
     }
-
-    curlCmd += " }\" "
+    curlCmd += "} }\" "
 
     // push the event
     sh "${curlCmd}"
