@@ -29,8 +29,7 @@ def call( Map args )
     String deploymentProject = args.containsKey("deploymentProject") ? args.deploymentProject : ""
     String ciBackLink = args.containsKey("ciBackLink") ? args.ciBackLink : "${env.BUILD_URL}"
 
-    String buildId = args.containsKey("buildId") ? args.buildId : "${env.BUILD_ID}"
-    String gitCommitId = args.containsKey("gitCommitId") ? args.gitCommitId : "${env.GIT_COMMIT}"
+    String customProperties = args.containsKey("customProperties") ? args.customProperties : [ properties : [] ]
 
     // check minimum required params
     if(tagRule == "" ) {
@@ -44,6 +43,7 @@ def call( Map args )
 
     // build the curl command
     int numberOfTags = tagRule[0].tags.size()
+    int numberOfProperties = customProperties.properties.size()
 
     String curlCmd = "curl -X POST \"${dtTenantUrl}/api/v1/events?Api-Token=${dtApiToken}\" -H \"accept: application/json\" -H \"Content-Type: application/json\" -d \"{" 
     curlCmd += " \\\"eventType\\\": \\\"${eventType}\\\","
@@ -57,7 +57,13 @@ def call( Map args )
     curlCmd += " ] }] },"
 
     curlCmd += " \\\"deploymentName\\\":\\\"${deploymentName}\\\", \\\"deploymentVersion\\\":\\\"${deploymentVersion}\\\", \\\"deploymentProject\\\":\\\"${deploymentProject}\\\", \\\"ciBackLink\\\":\\\"${ciBackLink}\\\", \\\"source\\\":\\\"Jenkins\\\","
+    
     curlCmd += " \\\"customProperties\\\": { \\\"Jenkins Build Number\\\": \\\"${buildId}\\\",  \\\"Git commit\\\": \\\"${gitCommitId}\\\" }"
+    
+    customProperties.properties.eachWithIndex { property, i ->
+        sh "echo ${property.key}"
+    }
+
     curlCmd += " }\" "
 
     // push the event

@@ -55,7 +55,7 @@ def call( Map args )
     curlCmd += " ] }] },"
 
     curlCmd += " \\\"description\\\":\\\"${description}\\\", \\\"source\\\":\\\"${source}\\\", \\\"configuration\\\":\\\"${configuration}\\\", "
-    curlCmd += " \\\"customProperties\\\": { \\\"remediationAction\\\": \\\"${remediationAction}\\\" }"
+    curlCmd += " \\\"customProperties\\\": { \\\"Remediation Action\\\": \\\"${remediationAction}\\\" }"
     curlCmd += " }\" "
 
     // push the event
