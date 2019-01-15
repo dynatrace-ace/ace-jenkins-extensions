@@ -54,8 +54,8 @@ def call( Map args )
 
     // lets run the test and put the console output to output.txt
     echo "Execute the jMeter test and console output goes to output.txt."
-    sh "/jmeter/bin/jmeter.sh -n -t ./${scriptName} -e -o ${resultsDir} -l ${resultsDir}_result.tlf -JSERVER_URL='${serverUrl}' -JDT_LTN='${LTN}' -JVUCount='${vuCount}' -JLoopCount='${loopCount}' -JCHECK_PATH='${checkPath}' -JSERVER_PORT='${serverPort}' -JThinkTime='${thinkTime}' > output.txt"                    
-    sh "cat output.txt"
+    sh "/jmeter/bin/jmeter.sh -n -t ./${scriptName} -e -o ${resultsDir} -l ${resultsDir}_result.tlf -JSERVER_URL='${serverUrl}' -JDT_LTN='${LTN}' -JVUCount='${vuCount}' -JLoopCount='${loopCount}' -JCHECK_PATH='${checkPath}' -JSERVER_PORT='${serverPort}' -JThinkTime='${thinkTime}' "                    
+    //sh "cat output.txt"
 
     // archive the artifacts
     perfReport percentiles: '0,50,90,100', sourceDataFiles: "${resultsDir}_result.tlf"
