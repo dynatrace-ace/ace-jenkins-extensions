@@ -2,6 +2,6 @@
 Used to push a Configuration Changed Event to Dynatrace
 
 ### *usage:*
-errorCode=pushDynatraceConfigurationEvent(TBD)
+errorCode=pushDynatraceConfigurationEvent(tagRule)
 if(errorCode > 0)
   error "Pushing event to Dynatrace failed"
