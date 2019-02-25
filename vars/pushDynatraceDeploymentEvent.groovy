@@ -58,8 +58,20 @@ def call( Map args )
     }
     curlCmd += " ] }] },"
 
-    // set deploymentName, deploymentVersion, deploymentProject, ciBackLink
-    curlCmd += " \\\"deploymentName\\\":\\\"${deploymentName}\\\", \\\"deploymentVersion\\\":\\\"${deploymentVersion}\\\", \\\"deploymentProject\\\":\\\"${deploymentProject}\\\", \\\"ciBackLink\\\":\\\"${ciBackLink}\\\", \\\"source\\\":\\\"Jenkins\\\","
+    // set deploymentName, deploymentVersion, deploymentProject, ciBackLink, source
+    if (deploymentName != "null")
+      curlCmd += " \\\"deploymentName\\\":\\\"${deploymentName}\\\","
+    
+    if (deploymentVersion != "null")
+      curlCmd += " \\\"deploymentVersion\\\":\\\"${deploymentVersion}\\\","
+       
+    if (deploymentProject != "null")
+      curlCmd += " \\\"deploymentProject\\\":\\\"${deploymentProject}\\\","
+
+    if (ciBackLink != "null") 
+      curlCmd += " \\\"ciBackLink\\\":\\\"${ciBackLink}\\\","
+      
+    curlCmd += " \\\"source\\\":\\\"Jenkins\\\","
     
     // set custom properties
     curlCmd += " \\\"customProperties\\\": { "
