@@ -53,10 +53,9 @@ def call( Map args )
     }
     curlCmd += "} }\" "
 
-    echo curlCmd
 
-    // push the event
-    //sh "${curlCmd}"
+    // send the event
+    sh "${curlCmd}"
 
     return errorCode
 }
