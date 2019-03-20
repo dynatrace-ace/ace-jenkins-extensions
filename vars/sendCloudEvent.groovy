@@ -53,7 +53,6 @@ def call( Map args )
     }
     curlCmd += "} }\" "
 
-
     // send the event
     sh "${curlCmd}"
 
