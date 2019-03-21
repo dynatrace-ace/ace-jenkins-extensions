@@ -16,6 +16,7 @@ def call( Map args )
     def receiver = args.containsKey("receiver") ? args.receiver : ""
     def type = args.containsKey("type") ? args.type : ""
     def source = args.containsKey("source") ? args.source : ""
+    def shkeptncontext = args.containsKey("shkeptncontext") ? args.shkeptncontext : ""
     def data = args.containsKey("data") ? args.data : [ ]
 
     // check minimum required params
@@ -44,6 +45,7 @@ def call( Map args )
     curlCmd += " \\\"id\\\": \\\"${id}\\\","
     curlCmd += " \\\"time\\\": \\\"${time}\\\","
     curlCmd += " \\\"datacontenttype\\\": \\\"${datacontenttype}\\\","
+    curlCmd += " \\\"shkeptncontext\\\": \\\"${shkeptncontext}\\\","
     
     // set data block 
     curlCmd += " \\\"data\\\": { "
