@@ -29,7 +29,7 @@ def call( Map args )
     String deploymentVersion = args.containsKey("deploymentVersion") ? args.deploymentVersion : "${env.VERSION}"
     String deploymentProject = args.containsKey("deploymentProject") ? args.deploymentProject : ""
     String ciBackLink = args.containsKey("ciBackLink") ? args.ciBackLink : "${env.BUILD_URL}"
-    String ciBackLink = args.containsKey("remediationAction") ? args.remediationAction : "null"
+    String remediationAction = args.containsKey("remediationAction") ? args.remediationAction : "null"
     
 
     def customProperties = args.containsKey("customProperties") ? args.customProperties : [ ]
