@@ -15,6 +15,7 @@ def call( Map args )
         String deploymentVersion 
         String deploymentProject
         String ciBackLink 
+        String remediationAction
 
         def customProperties
     */
@@ -28,6 +29,8 @@ def call( Map args )
     String deploymentVersion = args.containsKey("deploymentVersion") ? args.deploymentVersion : "${env.VERSION}"
     String deploymentProject = args.containsKey("deploymentProject") ? args.deploymentProject : ""
     String ciBackLink = args.containsKey("ciBackLink") ? args.ciBackLink : "${env.BUILD_URL}"
+    String ciBackLink = args.containsKey("remediationAction") ? args.remediationAction : "null"
+    
 
     def customProperties = args.containsKey("customProperties") ? args.customProperties : [ ]
 
@@ -70,7 +73,10 @@ def call( Map args )
 
     if (ciBackLink != "null") 
       curlCmd += " \\\"ciBackLink\\\":\\\"${ciBackLink}\\\","
-      
+
+    if (remediationAction != "null") 
+      curlCmd += " \\\"remediationAction\\\":\\\"${remediationAction}\\\","
+  
     curlCmd += " \\\"source\\\":\\\"Jenkins\\\","
     
     // set custom properties
