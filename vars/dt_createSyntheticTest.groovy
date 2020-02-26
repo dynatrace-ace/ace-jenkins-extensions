@@ -64,27 +64,27 @@ def call( Map args )
     // push the event
     //sh "${curlCmd}"
 
-    def http = new HTTPBuilder( ${dtTenantUrl}+'/api/v1/synthetic/monitors' )
+    def http = new HTTPBuilder( dtTenantUrl + '/api/v1/synthetic/monitors' )
     http.request( POST, JSON ) { req ->
-      headers.'Authorization' = 'Api-Token '+${dtApiToken}
+      headers.'Authorization' = 'Api-Token ' + dtApiToken
       headers.'Content-Type' = 'application/json'
       body = [
-        name: ${testName},
-        frequencyMin: ${frequency},
+        name: testName,
+        frequencyMin: frequency,
         enabled: true,
         type: "HTTP",
         script: [
           version: "1.0",
           requests: [
             [
-              description: ${testName},
-              url: ${url},
-              method: ${method}
+              description: testName,
+              url: url,
+              method: method
             ]
           ]
         ],
         locations: [
-          ${location}
+          location
         ]
       ]
   
