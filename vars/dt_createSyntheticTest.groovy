@@ -99,6 +99,5 @@ def call( Map args )
             "\njson = ${json}")
       }
     }
-
-    return errorCode
+    return 0
 }
