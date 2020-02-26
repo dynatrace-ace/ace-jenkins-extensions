@@ -3,6 +3,7 @@
 import groovyx.net.http.HTTPBuilder
 import groovy.json.JsonOutput
 import static groovyx.net.http.Method.*
+import static groovyx.net.http.ContentType.*
 
 /***************************\
   This function assumes we run on a Jenkins Agent that has curl command available.
