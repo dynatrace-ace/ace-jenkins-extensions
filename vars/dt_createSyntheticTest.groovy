@@ -25,11 +25,11 @@ def call( Map args )
     // check input arguments
     String dtTenantUrl = args.containsKey("dtTenantUrl") ? args.dtTenantUrl : "${DT_TENANT_URL}"
     String dtApiToken = args.containsKey("dtApiToken") ? args.dtApiToken : "${DT_API_TOKEN}"
-    String testName = args.containsKey("testName") ? args.remediationAction : ""
-    String url = args.containsKey("url") ? args.remediationAction : ""
-    String method = args.containsKey("method") ? args.remediationAction : "GET"
-    String frequency = args.containsKey("frequency") ? args.remediationAction : 1
-    String location = args.containsKey("location") ? args.remediationAction : ""
+    String testName = args.containsKey("testName") ? args.testName : ""
+    String url = args.containsKey("url") ? args.url : ""
+    String method = args.containsKey("method") ? args.method : "GET"
+    String frequency = args.containsKey("frequency") ? args.frequency : 1
+    String location = args.containsKey("location") ? args.location : ""
     
     // check minimum required params
     if(testName == "" ) {
