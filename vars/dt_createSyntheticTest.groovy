@@ -1,3 +1,6 @@
+@Grab('org.codehaus.groovy.modules.http-builder:http-builder:0.7' )
+ 
+import groovyx.net.http.HTTPBuilder
 import groovy.json.JsonOutput
 
 /***************************\
@@ -45,7 +48,7 @@ def call( Map args )
     int errorCode = 0
 
     // set Dynatrace URL, API Token and Event Type.
-    String curlCmd = "curl -X POST \"${dtTenantUrl}/api/v1/synthetic/monitors?Api-Token=${dtApiToken}\" -H \"accept: application/json\" -H \"Content-Type: application/json\" -d \"{" 
+    /*String curlCmd = "curl -X POST \"${dtTenantUrl}/api/v1/synthetic/monitors?Api-Token=${dtApiToken}\" -H \"accept: application/json\" -H \"Content-Type: application/json\" -d \"{" 
     curlCmd += " \\\"name\\\": \\\"${testName}\\\","
     curlCmd += " \\\"frequencyMin\\\": \\\"${frequency}\\\","
     curlCmd += " \\\"enabled\\\": true,"
@@ -56,10 +59,44 @@ def call( Map args )
     curlCmd += " \\\"description\\\": \\\"${testName}\\\","
     curlCmd += " \\\"url\\\": \\\"${url}\\\","
     curlCmd += " \\\"method\\\": \\\"${method}\\\"}]},"
-    curlCmd += " \\\"locations\\\": [\\\"${location}\\\"]}"
+    curlCmd += " \\\"locations\\\": [\\\"${location}\\\"]}" */
       
     // push the event
-    sh "${curlCmd}"
+    //sh "${curlCmd}"
+
+    def http = new HTTPBuilder( ${dtTenantUrl}+'/api/v1/synthetic/monitors' )
+    http.request( POST, JSON ) { req ->
+      headers.'Authorization' = 'Api-Token '+${dtApiToken}
+      headers.'Content-Type' = 'application/json'
+      body = [
+        name: ${testName},
+        frequencyMin: ${frequency},
+        enabled: true,
+        type: "HTTP",
+        script: [
+          version: "1.0",
+          requests: [
+            [
+              description: ${testName},
+              url: ${url},
+              method: ${method}
+            ]
+          ]
+        ],
+        locations: [
+          ${location}
+        ]
+      ]
+  
+      response.success = { resp, json ->
+          // response handling here
+      }
+      response.failure = { resp, json ->
+        throw new Exception("Stopping at item POST: uri: " + uri + "\n" +
+            "   Unknown error trying to create item: ${resp.status}, not creating Item." +
+            "\njson = ${json}")
+      }
+    }
 
     return errorCode
 }
