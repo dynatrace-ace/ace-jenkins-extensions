@@ -75,14 +75,12 @@ def call( Map args )
       ]
   
       response.success = { resp, json ->
-          echo resp
-          return errorCode
+
       }
       response.failure = { resp, json ->
         throw new Exception("Stopping at item POST: uri: " + uri + "\n" +
             "   Unknown error trying to create item: ${resp.status}, not creating Item." +
             "\njson = ${json}")
-        return -1
       }
     }
     return errorCode
