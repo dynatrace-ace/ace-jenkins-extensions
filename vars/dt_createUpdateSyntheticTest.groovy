@@ -2,8 +2,6 @@
  
 import groovyx.net.http.HTTPBuilder
 import groovy.json.JsonOutput
-import groovy.json.*
-import groovy.json.JsonSlurper
 import static groovyx.net.http.Method.*
 import static groovyx.net.http.ContentType.*
 
