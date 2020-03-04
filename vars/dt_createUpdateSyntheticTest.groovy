@@ -66,7 +66,7 @@ def call( Map args )
       }
       response.failure = { resp, json ->
         throw new Exception("Stopping at item POST: uri: " + uri + "\n" +
-            "  Unknown error trying to create item: ${resp.status}, not creating Item." +
+            "  Unknown error trying to get item: ${resp.status}, not getting Item." +
             "\njson = ${json}")
       }
     }
