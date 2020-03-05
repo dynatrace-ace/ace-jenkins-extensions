@@ -7,7 +7,7 @@ import static groovyx.net.http.ContentType.*
 
 /***************************\
   This function assumes we run on a Jenkins Agent that has curl command available.
-  Returns either 0(=no errors), 1(=pushing event failed)
+  Returns either 0(=no errors), 1(=create/update syntthetic monitor failed)
 \***************************/
 @NonCPS
 def call( Map args ) 
@@ -48,7 +48,6 @@ def call( Map args )
     int errorCode = 0
 
     def http = new HTTPBuilder( dtTenantUrl + '/api/v1/synthetic/monitors' )
-    def parser = new groovy.json.JsonSlurper()
  
     http.request( GET, JSON ) { req ->
       headers.'Authorization' = 'Api-Token ' + dtApiToken
@@ -65,7 +64,7 @@ def call( Map args )
 
       }
       response.failure = { resp, json ->
-        throw new Exception("Stopping at item POST: uri: " + uri + "\n" +
+        throw new Exception("Stopping at item GET: uri: " + uri + "\n" +
             "  Unknown error trying to get item: ${resp.status}, not getting Item." +
             "\njson = ${json}")
       }
@@ -139,7 +138,7 @@ def call( Map args )
 
       }
       response.failure = { resp, json ->
-        throw new Exception("Stopping at item POST: uri: " + uri + "\n" +
+        throw new Exception("Stopping at item PUT: uri: " + uri + "\n" +
             "   Unknown error trying to update item: ${resp.status}, not updating Item." +
             "\njson = ${json}")
       }
