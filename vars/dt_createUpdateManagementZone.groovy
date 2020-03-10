@@ -85,6 +85,7 @@ def call( Map args )
         ]
         response.success = { resp, json ->
             println "Management zone created successfully! ${resp.status}"
+            dtManagementZoneId = json.id
 
         }
         response.failure = { resp, json ->
