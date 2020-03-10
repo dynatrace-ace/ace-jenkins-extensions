@@ -61,7 +61,6 @@ def call( Map args )
             println "Found monitor ${json.monitors[i].name} with id ${dtSyntheticMonitorId}"
           }
         }
-
       }
       response.failure = { resp, json ->
         throw new Exception("Stopping at item GET: uri: " + uri + "\n" +
@@ -70,7 +69,7 @@ def call( Map args )
       }
     }
     
-    if (dtSyntheticMonitorId == ""){
+  if (dtSyntheticMonitorId == ""){
 
       http.request( POST, JSON ) { req ->
       headers.'Authorization' = 'Api-Token ' + dtApiToken
@@ -96,7 +95,7 @@ def call( Map args )
       ]
   
       response.success = { resp, json ->
-      println "Monitors created successfully! ${resp.status}"
+      println "Monitor created successfully! ${resp.status}"
 
       }
       response.failure = { resp, json ->
@@ -134,7 +133,7 @@ def call( Map args )
       ]
   
       response.success = { resp, json ->
-      println "Monitors updated successfully! ${resp.status}"
+        println "Monitor updated successfully! ${resp.status}"
 
       }
       response.failure = { resp, json ->
