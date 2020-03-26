@@ -211,7 +211,6 @@ def getEvaluationResults(String keptn_url, String keptn_api_token, String keptn_
                     //if (json.data.result) evaluated = true;
                     returnValue = [ "result": "success", "data": "${json.data}" ];
                     return returnValue;
-                    break;
                 }
                 
                 response.failure = { resp, json ->
@@ -228,6 +227,7 @@ def getEvaluationResults(String keptn_url, String keptn_api_token, String keptn_
                         return returnValue;
                     }
                 }
+                if(returnValue.result.toString().equals("success") || returnValue.result.toString().equals("fail")) break;
             }
         }
         catch (Exception e) {
