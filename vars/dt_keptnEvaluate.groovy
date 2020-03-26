@@ -233,8 +233,8 @@ def getEvaluationResults(String keptn_url, String keptn_api_token, String keptn_
         }
 
         i++;
-        @NonCPS
-        sleep(wait);
+        
+        java.thread.sleep(wait);
     }
 
     returnValue = [ "result": "fail", "data": "ERROR: NO EVALUATION RESULT AFTER ${retries} retries of ${wait} seconds." ];
