@@ -186,18 +186,18 @@ def getEvaluationResults(String keptn_url, String keptn_api_token, String keptn_
         echo "[dt_processEvent.groovy] Keptn API Token is: " + keptn_api_token;
         echo "[dt_processEvent.groovy] Keptn Context is: " + keptn_context;
     }
-
+    def http;
     
     //if (bDebug) http.ignoreSSLIssues();
        
     String strKeptnEventType="sh.keptn.events.evaluation-done";
 
-    int i = 0;
+    int i = 1;
     boolean evaluated = false;
     boolean techIssue = false;
-    while (!evaluated && !techIssue && i<retries){
-        echo "[dt_processEvent.groovy] Waiting for evaluation results, try " + i + " of " + retries;
-        def http = new HTTPBuilder( keptn_url + '/v1/event' );
+    while (!evaluated && !techIssue && i<=retries){
+        echo "[dt_processEvent.groovy] Waiting for evaluation results, try " + i+1 + " of " + retries;
+        http = new HTTPBuilder( keptn_url + '/v1/event' );
         try {
             http.request( GET, JSON ) { req ->
                 headers.'x-token' = keptn_api_token
@@ -233,7 +233,7 @@ def getEvaluationResults(String keptn_url, String keptn_api_token, String keptn_
         }
 
         i++;
-        sleep(wait);
+        if(!evaluated && !techIssue) sleep(wait);
     }
 
 
