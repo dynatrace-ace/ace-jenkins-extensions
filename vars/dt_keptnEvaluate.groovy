@@ -175,7 +175,7 @@ def getEvaluationResults(String keptn_url, String keptn_api_token, String keptn_
     String strKeptnEventType="sh.keptn.events.evaluation-done";
 
     try {
-        http.request( POST, JSON ) { req ->
+        http.request( GET, JSON ) { req ->
             headers.'x-token' = keptn_api_token
             headers.'Content-Type' = 'application/json'
             headers.'type' = strKeptnEventType
