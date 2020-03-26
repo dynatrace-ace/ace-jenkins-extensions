@@ -113,6 +113,7 @@ def processEvent( Map args) {
 
 } 
 
+@NonCPS
 def sendStartEvaluationEvent(String keptn_url, String keptn_api_token, String keptn_project, String keptn_service, String keptn_stage, String start_time, String end_time) {
 
     def http = new HTTPBuilder( keptn_url + '/v1/event' );
