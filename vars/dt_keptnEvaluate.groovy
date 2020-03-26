@@ -241,7 +241,7 @@ def getEvaluationResults(String keptn_url, String keptn_api_token, String keptn_
         
         Thread.sleep(wait*1000);
     }
-
+    if(!returnValue.result.toString().equals("success") && !returnValue.result.toString().equals("fail"))
     returnValue = [ "result": "fail", "data": "ERROR: NO EVALUATION RESULT AFTER ${retries} retries of ${wait} seconds." ];
 
     if (bDebug) echo "[dt_processEvent.groovy] EXIT getEvaluationResults";
