@@ -124,6 +124,15 @@ def sendStartEvaluationEvent(String keptn_url, String keptn_api_token, String ke
     if (bDebug) echo "[dt_processEvent.groovy] ENTER sendStartEvaluationEvent";
     def http = new HTTPBuilder( keptn_url + '/v1/event' );
     //if (bDebug) http.ignoreSSLIssues();
+    if (bDebug) {
+        echo "[dt_processEvent.groovy] Keptn URL is: " + keptn_url;
+        echo "[dt_processEvent.groovy] Keptn API Token is: " + keptn_api_token;
+        echo "[dt_processEvent.groovy] Keptn Project is: " + keptn_context;
+        echo "[dt_processEvent.groovy] Keptn Service is: " + keptn_service;
+        echo "[dt_processEvent.groovy] Keptn Stage is: " + keptn_stage;
+        echo "[dt_processEvent.groovy] Eval start is: " + start_time;
+        echo "[dt_processEvent.groovy] Eval end is: " + end_time;
+    }
        
     String strKeptnEventType="sh.keptn.event.start-evaluation";
 
@@ -168,6 +177,11 @@ def sendStartEvaluationEvent(String keptn_url, String keptn_api_token, String ke
 def getEvaluationResults(String keptn_url, String keptn_api_token, String keptn_context, boolean bDebug)
 {
     if (bDebug) echo "[dt_processEvent.groovy] ENTER getEvaluationResults";
+    if (bDebug) {
+        echo "[dt_processEvent.groovy] Keptn URL is: " + keptn_url;
+        echo "[dt_processEvent.groovy] Keptn API Token is: " + keptn_api_token;
+        echo "[dt_processEvent.groovy] Keptn Context is: " + keptn_context;
+    }
 
     def http = new HTTPBuilder( keptn_url + '/v1/event' );
     //if (bDebug) http.ignoreSSLIssues();
@@ -189,7 +203,6 @@ def getEvaluationResults(String keptn_url, String keptn_api_token, String keptn_
             response.failure = { resp, json ->
                 println "Failure: ${resp} ++ ${json}";
                 if (bDebug) echo "[dt_processEvent.groovy] Setting returnValue to: 'ERROR: SEND KEPTN EVENT FAILED'";
-                if (bDebug) echo "[dt_processEvent.groovy] Error Details: " + resp + json;
                 returnValue = [ "result": "fail", "data": "ERROR: SEND KEPTN EVENT FAILED" ];
             }
         }
