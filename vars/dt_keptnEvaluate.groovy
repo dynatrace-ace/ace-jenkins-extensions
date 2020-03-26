@@ -192,8 +192,10 @@ def getEvaluationResults(String keptn_url, String keptn_api_token, String keptn_
         http.request( GET, JSON ) { req ->
             headers.'x-token' = keptn_api_token
             headers.'Content-Type' = 'application/json'
-            params.'type' = strKeptnEventType
-            params.'keptnContext' = keptn_context
+            query = [
+                'type': strKeptnEventType,
+                'keptnContext': keptn_context
+            ]
             
             response.success = { resp, json ->
                 if (bDebug) echo "[dt_processEvent.groovy] Success: ${json} ++ Keptn Context: ${keptn_context}";
@@ -201,7 +203,7 @@ def getEvaluationResults(String keptn_url, String keptn_api_token, String keptn_
             }
             
             response.failure = { resp, json ->
-                println "Failure: ${resp} ++ ${json} ++ ${req} ++ ${req.getAllHeaders()}";
+                println "Failure: ${resp} ++ ${json} ++ ${req}";
                 if (bDebug) echo "[dt_processEvent.groovy] Setting returnValue to: 'ERROR: SEND KEPTN EVENT FAILED'";
                 returnValue = [ "result": "fail", "data": "ERROR: SEND KEPTN EVENT FAILED" ];
             }
