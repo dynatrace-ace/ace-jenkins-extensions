@@ -108,8 +108,13 @@ def processEvent( Map args) {
     returnValue = [ "result": "fail", "data": "ERROR: Missing input parameters. See log." ];
     }*/
 
+    returnValue = sendStartEvaluationEvent(strKeptnURL, strKeptnAPIToken, strKeptnProject, strKeptnService, strKeptnStage, strStartTime, strEndTime, bDebug);
+    if(returnValue.result == "fail") return returnValue;
+    if(returnValue.keptnContext == null || returnValue.keptnContext == "") return [ "result": "fail", "data": "ERROR: Invalid keptnContext returned from sending evaluation event." ];
+    
+    returnValue = getEvaluationResults(strKeptnURL, strKeptnAPIToken, returnValue.keptnContext, bDebug);
 
-    returnValue = sendStartEvaluationEvent(strKeptnURL, strKeptnAPIToken, strKeptnProject, strKeptnService, strKeptnStage, strStartTime, strEndTime, bDebug)
+
 
     return returnValue;
 } 
@@ -119,11 +124,7 @@ def sendStartEvaluationEvent(String keptn_url, String keptn_api_token, String ke
     if (bDebug) echo "[dt_processEvent.groovy] ENTER sendStartEvaluationEvent";
     def http = new HTTPBuilder( keptn_url + '/v1/event' );
     //if (bDebug) http.ignoreSSLIssues();
-    
-    //-------------------------------------------------------------------
-    //------------------------ SEND KEPTN EVENT -------------------------
-    //-------------------------------------------------------------------
-    
+       
     String strKeptnEventType="sh.keptn.event.start-evaluation";
 
     try {
@@ -160,6 +161,45 @@ def sendStartEvaluationEvent(String keptn_url, String keptn_api_token, String ke
         
         }
     if (bDebug) echo "[dt_processEvent.groovy] EXIT sendStartEvaluationEvent";
+    return returnValue;
+}
+
+@NonCPS
+def getEvaluationResults(String keptn_url, String keptn_api_token, String keptn_context, boolean bDebug)
+{
+    if (bDebug) echo "[dt_processEvent.groovy] ENTER getEvaluationResults";
+
+    def http = new HTTPBuilder( keptn_url + '/v1/event' );
+    //if (bDebug) http.ignoreSSLIssues();
+       
+    String strKeptnEventType="sh.keptn.events.evaluation-done";
+
+    try {
+        http.request( POST, JSON ) { req ->
+            headers.'x-token' = keptn_api_token
+            headers.'Content-Type' = 'application/json'
+            headers.'type' = strKeptnEventType
+            headers.'keptnContext' = keptn_context
+            
+            response.success = { resp, json ->
+                if (bDebug) echo "[dt_processEvent.groovy] Success: ${json} ++ Keptn Context: ${keptn_context}";
+                returnValue = [ "result": "success", "data": "${json.data}" ];
+            }
+            
+            response.failure = { resp, json ->
+                println "Failure: ${resp} ++ ${json}";
+                if (bDebug) echo "[dt_processEvent.groovy] Setting returnValue to: 'ERROR: SEND KEPTN EVENT FAILED'";
+                returnValue = [ "result": "fail", "data": "ERROR: SEND KEPTN EVENT FAILED" ];
+            }
+        }
+    }
+        catch (Exception e) {
+            echo "[dt_processEvent.groovy] SEND EVENT: Exception caught: " + e.getMessage();
+            returnValue = [ "result": "fail", "data": "ERROR: " + e.getMessage() ];
+        }
+
+
+    if (bDebug) echo "[dt_processEvent.groovy] EXIT getEvaluationResults";
     return returnValue;
 }
 
