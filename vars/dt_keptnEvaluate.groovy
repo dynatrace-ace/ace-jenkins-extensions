@@ -111,6 +111,7 @@ def processEvent( Map args) {
 
     returnValue = sendStartEvaluationEvent(strKeptnURL, strKeptnAPIToken, strKeptnProject, strKeptnService, strKeptnStage, strStartTime, strEndTime, bDebug)
 
+    return returnValue;
 } 
 
 @NonCPS
@@ -159,5 +160,6 @@ def sendStartEvaluationEvent(String keptn_url, String keptn_api_token, String ke
         
         }
     if (bDebug) echo "[dt_processEvent.groovy] EXIT sendStartEvaluationEvent";
+    return returnValue;
 }
 
