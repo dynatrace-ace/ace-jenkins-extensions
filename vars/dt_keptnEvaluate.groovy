@@ -118,7 +118,7 @@ def processEvent( Map args) {
     //if (bDebug) echo "[dt_processEvent.groovy] Keptn Project is: " + keptn_context; 
     returnValue = getEvaluationResults(strKeptnURL, strKeptnAPIToken, returnValue.data, iRetries, iWait, bDebug);
 
-    returnValue= buildEvaluationResult(returnValue);
+    returnValue= buildEvaluationResult(returnValue, bDebug);
 
     return returnValue;
 } 
@@ -247,7 +247,7 @@ def getEvaluationResults(String keptn_url, String keptn_api_token, String keptn_
 }
 
 @NonCPS
-def buildEvaluationResult (evaluationData)
+def buildEvaluationResult (evaluationData, bDebug)
 {
     if (bDebug) echo "[dt_processEvent.groovy] ENTER buildEvaluationResult";
     String buildEvaluation = evaluationData.result;
