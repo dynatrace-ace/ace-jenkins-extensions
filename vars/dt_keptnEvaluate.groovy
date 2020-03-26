@@ -118,7 +118,7 @@ def processEvent( Map args) {
     //if (bDebug) echo "[dt_processEvent.groovy] Keptn Project is: " + keptn_context; 
     returnValue = getEvaluationResults(strKeptnURL, strKeptnAPIToken, returnValue.data, iRetries, iWait, bDebug);
 
-    returnValue= buildEvaluationResult(returnValue, bDebug);
+    returnValue= buildEvaluationResult(returnValue.data, bDebug);
 
     return returnValue;
 } 
