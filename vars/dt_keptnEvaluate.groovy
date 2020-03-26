@@ -234,7 +234,7 @@ def getEvaluationResults(String keptn_url, String keptn_api_token, String keptn_
         sleep(wait);
     }
 
-    returnValue = [ "result": "fail", "data": "ERROR: NO EVALUATION RESULT AFTER " + retries " retries of " + wait + "seconds." ];
+    returnValue = [ "result": "fail", "data": "ERROR: NO EVALUATION RESULT AFTER ${retries} retries of ${wait} seconds." ];
 
     if (bDebug) echo "[dt_processEvent.groovy] EXIT getEvaluationResults";
     return returnValue;
