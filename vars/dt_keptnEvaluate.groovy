@@ -185,6 +185,8 @@ def getEvaluationResults(String keptn_url, String keptn_api_token, String keptn_
         echo "[dt_processEvent.groovy] Keptn URL is: " + keptn_url;
         echo "[dt_processEvent.groovy] Keptn API Token is: " + keptn_api_token;
         echo "[dt_processEvent.groovy] Keptn Context is: " + keptn_context;
+        echo "[dt_processEvent.groovy] Retries: " + retries;
+        echo "[dt_processEvent.groovy] Wait: " + wait;
     }
     def http;
     
@@ -215,7 +217,7 @@ def getEvaluationResults(String keptn_url, String keptn_api_token, String keptn_
                     println "Failure: ${resp} ++ ${json} ++ ${req}";
                     //if (bDebug) echo "[dt_processEvent.groovy] Setting returnValue to: 'ERROR: SEND KEPTN EVENT FAILED'";
                     if (bDebug) echo "[dt_processEvent.groovy] response code: " + json.code
-                    if(json.code.toString().contains("500")) echo "[dt_processEvent.groovy] No evaluation results found yet, retrying..."
+                    if(json.code.toString().equals("500")) echo "[dt_processEvent.groovy] No evaluation results found yet, retrying..."
                     else {
                         echo "[dt_processEvent.groovy] Techncal error when attempting to evaluate, break from loop...";
                         returnValue = [ "result": "fail", "data": "ERROR: SEND KEPTN EVENT FAILED" ];
@@ -231,6 +233,7 @@ def getEvaluationResults(String keptn_url, String keptn_api_token, String keptn_
         }
 
         i++;
+        @NonCPS
         sleep(wait);
     }
 
