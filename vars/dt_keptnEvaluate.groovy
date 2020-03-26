@@ -194,7 +194,8 @@ def getEvaluationResults(String keptn_url, String keptn_api_token, String keptn_
 
     int i = 0;
     boolean evaluated = false;
-    while (!evaluated && i<retries){
+    boolean techIssue = false;
+    while (!evaluated && !techIssue && i<retries){
         echo "[dt_processEvent.groovy] Waiting for evaluation results, try " + i + " of " + retries;
         try {
             http.request( GET, JSON ) { req ->
@@ -209,7 +210,7 @@ def getEvaluationResults(String keptn_url, String keptn_api_token, String keptn_
                     if (bDebug) echo "[dt_processEvent.groovy] Success: ${json} ++ Keptn Context: ${keptn_context}";
                     if (json.data.result) evaluated = true;
                     returnValue = [ "result": "success", "data": "${json.data}" ];
-                    break;
+                    evaluated = true;
                 }
                 
                 response.failure = { resp, json ->
@@ -219,7 +220,7 @@ def getEvaluationResults(String keptn_url, String keptn_api_token, String keptn_
                     else {
                         echo "[dt_processEvent.groovy] Techncal error when attempting to evaluate, break from loop...";
                         returnValue = [ "result": "fail", "data": "ERROR: SEND KEPTN EVENT FAILED" ];
-                        break; 
+                        techIssue = true; 
                     }
                 }
             }
@@ -227,7 +228,7 @@ def getEvaluationResults(String keptn_url, String keptn_api_token, String keptn_
         catch (Exception e) {
             echo "[dt_processEvent.groovy] SEND EVENT: Exception caught: " + e.getMessage();
             returnValue = [ "result": "fail", "data": "ERROR: " + e.getMessage() ];
-            break;
+            techIssue = true; 
         }
 
         i++;
