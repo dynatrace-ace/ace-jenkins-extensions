@@ -209,22 +209,29 @@ def getEvaluationResults(String keptn_url, String keptn_api_token, String keptn_
                     if (bDebug) echo "[dt_processEvent.groovy] Success: ${json} ++ Keptn Context: ${keptn_context}";
                     if (json.data.result) evaluated = true;
                     returnValue = [ "result": "success", "data": "${json.data}" ];
+                    break;
                 }
                 
                 response.failure = { resp, json ->
                     println "Failure: ${resp} ++ ${json} ++ ${req}";
                     if (bDebug) echo "[dt_processEvent.groovy] Setting returnValue to: 'ERROR: SEND KEPTN EVENT FAILED'";
-                    returnValue = [ "result": "fail", "data": "ERROR: SEND KEPTN EVENT FAILED" ];
+                    if(json.code == "500") echo "[dt_processEvent.groovy] No evaluation results found yet..."
+                    else {
+                        echo "[dt_processEvent.groovy] Techncal error when attempting to evaluate, break from loop...";
+                        returnValue = [ "result": "fail", "data": "ERROR: SEND KEPTN EVENT FAILED" ];
+                        break; 
+                    }
                 }
             }
         }
         catch (Exception e) {
             echo "[dt_processEvent.groovy] SEND EVENT: Exception caught: " + e.getMessage();
             returnValue = [ "result": "fail", "data": "ERROR: " + e.getMessage() ];
+            break;
         }
 
         i++;
-        sleep(wait * 1000);
+        sleep(wait);
     }
 
 
