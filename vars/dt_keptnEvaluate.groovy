@@ -109,12 +109,12 @@ def processEvent( Map args) {
     }*/
 
 
-    returnValue = sendStartEvaluationEvent(strKeptnURL, strKeptnAPIToken, strKeptnProject, strKeptnService, strKeptnStage, strStartTime, strEndTime)
+    returnValue = sendStartEvaluationEvent(strKeptnURL, strKeptnAPIToken, strKeptnProject, strKeptnService, strKeptnStage, strStartTime, strEndTime, bDebug)
 
 } 
 
 @NonCPS
-def sendStartEvaluationEvent(String keptn_url, String keptn_api_token, String keptn_project, String keptn_service, String keptn_stage, String start_time, String end_time) {
+def sendStartEvaluationEvent(String keptn_url, String keptn_api_token, String keptn_project, String keptn_service, String keptn_stage, String start_time, String end_time, boolean bDebug) {
     if (bDebug) echo "[dt_processEvent.groovy] ENTER sendStartEvaluationEvent";
     def http = new HTTPBuilder( keptn_url + '/v1/event' );
     //if (bDebug) http.ignoreSSLIssues();
