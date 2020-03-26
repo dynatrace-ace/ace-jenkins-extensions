@@ -193,8 +193,8 @@ def getEvaluationResults(String keptn_url, String keptn_api_token, String keptn_
             headers.'x-token' = keptn_api_token
             headers.'Content-Type' = 'application/json'
             query = [
-                'type': strKeptnEventType,
-                'keptnContext': keptn_context
+                type: strKeptnEventType,
+                keptnContext: keptn_context
             ]
             
             response.success = { resp, json ->
