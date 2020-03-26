@@ -195,15 +195,13 @@ def getEvaluationResults(String keptn_url, String keptn_api_token, String keptn_
             headers.'type' = strKeptnEventType
             headers.'keptnContext' = keptn_context
             
-            echo req
-
             response.success = { resp, json ->
                 if (bDebug) echo "[dt_processEvent.groovy] Success: ${json} ++ Keptn Context: ${keptn_context}";
                 returnValue = [ "result": "success", "data": "${json.data}" ];
             }
             
-            response.failure = { resp, json ->
-                println "Failure: ${resp} ++ ${json}";
+            response.failure = { req, resp, json ->
+                println "Failure: ${resp} ++ ${json} ++ ${req}";
                 if (bDebug) echo "[dt_processEvent.groovy] Setting returnValue to: 'ERROR: SEND KEPTN EVENT FAILED'";
                 returnValue = [ "result": "fail", "data": "ERROR: SEND KEPTN EVENT FAILED" ];
             }
