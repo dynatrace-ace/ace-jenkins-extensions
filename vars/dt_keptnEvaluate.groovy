@@ -192,8 +192,8 @@ def getEvaluationResults(String keptn_url, String keptn_api_token, String keptn_
         http.request( GET, JSON ) { req ->
             headers.'x-token' = keptn_api_token
             headers.'Content-Type' = 'application/json'
-            headers.'type' = strKeptnEventType
-            headers.'keptnContext' = keptn_context
+            params.'type' = strKeptnEventType
+            params.'keptnContext' = keptn_context
             
             response.success = { resp, json ->
                 if (bDebug) echo "[dt_processEvent.groovy] Success: ${json} ++ Keptn Context: ${keptn_context}";
