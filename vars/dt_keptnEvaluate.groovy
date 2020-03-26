@@ -112,7 +112,7 @@ def processEvent( Map args) {
     if(returnValue.result == "fail") return returnValue;
     if(returnValue.data == null || returnValue.data == "") return [ "result": "fail", "data": "ERROR: Invalid keptnContext returned from sending evaluation event." ];
     
-    returnValue = getEvaluationResults(strKeptnURL, strKeptnAPIToken, returnValue.keptnContext, bDebug);
+    returnValue = getEvaluationResults(strKeptnURL, strKeptnAPIToken, returnValue.data, bDebug);
 
 
 
