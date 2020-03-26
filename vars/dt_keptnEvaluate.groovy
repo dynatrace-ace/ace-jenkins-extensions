@@ -111,7 +111,7 @@ def processEvent( Map args) {
     returnValue = sendStartEvaluationEvent(strKeptnURL, strKeptnAPIToken, strKeptnProject, strKeptnService, strKeptnStage, strStartTime, strEndTime, bDebug);
     if(returnValue.result == "fail") return returnValue;
     if(returnValue.data == null || returnValue.data == "") return [ "result": "fail", "data": "ERROR: Invalid keptnContext returned from sending evaluation event." ];
-    
+    //if (bDebug) echo "[dt_processEvent.groovy] Keptn Project is: " + keptn_context; 
     returnValue = getEvaluationResults(strKeptnURL, strKeptnAPIToken, returnValue.data, bDebug);
 
 
@@ -127,7 +127,7 @@ def sendStartEvaluationEvent(String keptn_url, String keptn_api_token, String ke
     if (bDebug) {
         echo "[dt_processEvent.groovy] Keptn URL is: " + keptn_url;
         echo "[dt_processEvent.groovy] Keptn API Token is: " + keptn_api_token;
-        echo "[dt_processEvent.groovy] Keptn Project is: " + keptn_context;
+        echo "[dt_processEvent.groovy] Keptn Project is: " + keptn_project;
         echo "[dt_processEvent.groovy] Keptn Service is: " + keptn_service;
         echo "[dt_processEvent.groovy] Keptn Stage is: " + keptn_stage;
         echo "[dt_processEvent.groovy] Eval start is: " + start_time;
