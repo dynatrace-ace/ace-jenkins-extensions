@@ -70,9 +70,9 @@ def processEvent( Map args) {
     echo "[dt_processEvent.groovy] Keptn Project is: " + strKeptnProject;
     echo "[dt_processEvent.groovy] Keptn Service is: " + strKeptnService;
     echo "[dt_processEvent.groovy] Keptn Stage is: " + strKeptnStage;
-    echo "[dt_processEvent.groovy] Keptn Event Type is: " + strKeptnEventType;
+    /*echo "[dt_processEvent.groovy] Keptn Event Type is: " + strKeptnEventType;
     echo "[dt_processEvent.groovy] Keptn Event Method is: " + strKeptnEventMethod;
-    echo "[dt_processEvent.groovy] Keptn Context is: " + strKeptnContext;
+    echo "[dt_processEvent.groovy] Keptn Context is: " + strKeptnContext;*/
     echo "[dt_processEvent.groovy] Start Time is: " + strStartTime;
     echo "[dt_processEvent.groovy] End Time is: " + strEndTime;
     echo "[dt_processEvent.groovy] Timeframe is: " + strTimeframe;
