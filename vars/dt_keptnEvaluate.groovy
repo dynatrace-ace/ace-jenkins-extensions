@@ -220,7 +220,7 @@ def getEvaluationResults(String keptn_url, String keptn_api_token, String keptn_
                     if (bDebug) echo "[dt_processEvent.groovy] response code: " + json.code
                     if(json.code.toString().equals("500")) {
                         echo "[dt_processEvent.groovy] No evaluation results found yet, retrying..."
-                        returnValue = [ "result": "pending", "No evaluation results found yet for ${keptn_context}, retrying..." ];
+                        returnValue = [ "result": "pending", "data": "No evaluation results found yet for ${keptn_context}, retrying..." ];
                     }
                     else {
                         echo "[dt_processEvent.groovy] Techncal error when attempting to evaluate, break from loop...";
