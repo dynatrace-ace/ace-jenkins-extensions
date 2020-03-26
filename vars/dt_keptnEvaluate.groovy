@@ -35,6 +35,8 @@ def processEvent( Map args) {
    'timeframe' // Minimum is 2m (2 minutes)
    'debug_mode' // boolean
    'timeout' // timeout in seconds. Default = 30s
+   'retries' // number of retries for getting the evaluation results. Default = 30
+   'wait' // time between each retry for getting the evaluation results. Default = 10s
 */
 
     def returnValue;
@@ -60,6 +62,8 @@ def processEvent( Map args) {
     String strEndTime = args.containsKey("end_time") ? args.end_time : "";
     String strTimeframe = args.containsKey("timeframe") ? args.timeframe : "";
     int iTimeout = args.containsKey("timeout") ? args.timeout : 30; // Default timeout is 30 seconds
+    int iRetries = args.containsKey("retries") ? args.retries : 30; // Default retries is 30
+    int iWait = args.containsKey("wait") ? args.wait : 10; // Default wait is 10 seconds
     boolean bDebug = args.containsKey("debug_mode") ? args.debug_mode : false;
 
     echo "[dt_processEvent.groovy] Debug Mode: " + bDebug;
@@ -112,7 +116,7 @@ def processEvent( Map args) {
     if(returnValue.result == "fail") return returnValue;
     if(returnValue.data == null || returnValue.data == "") return [ "result": "fail", "data": "ERROR: Invalid keptnContext returned from sending evaluation event." ];
     //if (bDebug) echo "[dt_processEvent.groovy] Keptn Project is: " + keptn_context; 
-    returnValue = getEvaluationResults(strKeptnURL, strKeptnAPIToken, returnValue.data, bDebug);
+    returnValue = getEvaluationResults(strKeptnURL, strKeptnAPIToken, returnValue.data, iRetries, iWait bDebug);
 
 
 
@@ -174,7 +178,7 @@ def sendStartEvaluationEvent(String keptn_url, String keptn_api_token, String ke
 }
 
 @NonCPS
-def getEvaluationResults(String keptn_url, String keptn_api_token, String keptn_context, boolean bDebug)
+def getEvaluationResults(String keptn_url, String keptn_api_token, String keptn_context, int retries, int wait, boolean bDebug)
 {
     if (bDebug) echo "[dt_processEvent.groovy] ENTER getEvaluationResults";
     if (bDebug) {
@@ -188,31 +192,40 @@ def getEvaluationResults(String keptn_url, String keptn_api_token, String keptn_
        
     String strKeptnEventType="sh.keptn.events.evaluation-done";
 
-    try {
-        http.request( GET, JSON ) { req ->
-            headers.'x-token' = keptn_api_token
-            headers.'Content-Type' = 'application/json'
-            uri.query = [
-                type: strKeptnEventType,
-                keptnContext: keptn_context
-            ]
-            
-            response.success = { resp, json ->
-                if (bDebug) echo "[dt_processEvent.groovy] Success: ${json} ++ Keptn Context: ${keptn_context}";
-                returnValue = [ "result": "success", "data": "${json.data}" ];
-            }
-            
-            response.failure = { resp, json ->
-                println "Failure: ${resp} ++ ${json} ++ ${req}";
-                if (bDebug) echo "[dt_processEvent.groovy] Setting returnValue to: 'ERROR: SEND KEPTN EVENT FAILED'";
-                returnValue = [ "result": "fail", "data": "ERROR: SEND KEPTN EVENT FAILED" ];
+    int i = 0;
+    boolean evaluated = false;
+    while (!evaluated && i<retries){
+        echo "[dt_processEvent.groovy] Waiting for evaluation results, try " + i + " of " + retries;
+        try {
+            http.request( GET, JSON ) { req ->
+                headers.'x-token' = keptn_api_token
+                headers.'Content-Type' = 'application/json'
+                uri.query = [
+                    type: strKeptnEventType,
+                    keptnContext: keptn_context
+                ]
+                
+                response.success = { resp, json ->
+                    if (bDebug) echo "[dt_processEvent.groovy] Success: ${json} ++ Keptn Context: ${keptn_context}";
+                    if (json.data.result) evaluated = true;
+                    returnValue = [ "result": "success", "data": "${json.data}" ];
+                }
+                
+                response.failure = { resp, json ->
+                    println "Failure: ${resp} ++ ${json} ++ ${req}";
+                    if (bDebug) echo "[dt_processEvent.groovy] Setting returnValue to: 'ERROR: SEND KEPTN EVENT FAILED'";
+                    returnValue = [ "result": "fail", "data": "ERROR: SEND KEPTN EVENT FAILED" ];
+                }
             }
         }
-    }
         catch (Exception e) {
             echo "[dt_processEvent.groovy] SEND EVENT: Exception caught: " + e.getMessage();
             returnValue = [ "result": "fail", "data": "ERROR: " + e.getMessage() ];
         }
+
+        i++;
+        sleep(wait * 1000);
+    }
 
 
     if (bDebug) echo "[dt_processEvent.groovy] EXIT getEvaluationResults";
