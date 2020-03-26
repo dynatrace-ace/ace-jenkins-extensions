@@ -217,7 +217,7 @@ def getEvaluationResults(String keptn_url, String keptn_api_token, String keptn_
                 response.failure = { resp, json ->
                     println "Failure: ${resp} ++ ${json} ++ ${req}";
                     if (bDebug) echo "[dt_processEvent.groovy] Setting returnValue to: 'ERROR: SEND KEPTN EVENT FAILED'";
-                    if(json.code.contains("500")) echo "[dt_processEvent.groovy] No evaluation results found yet..."
+                    if(json.code.toString().contains("500")) echo "[dt_processEvent.groovy] No evaluation results found yet..."
                     else {
                         echo "[dt_processEvent.groovy] Techncal error when attempting to evaluate, break from loop...";
                         returnValue = [ "result": "fail", "data": "ERROR: SEND KEPTN EVENT FAILED" ];
