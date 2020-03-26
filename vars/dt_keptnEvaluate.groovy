@@ -200,7 +200,7 @@ def getEvaluationResults(String keptn_url, String keptn_api_token, String keptn_
                 returnValue = [ "result": "success", "data": "${json.data}" ];
             }
             
-            response.failure = { req, resp, json ->
+            response.failure = { resp, json ->
                 println "Failure: ${resp} ++ ${json} ++ ${req}";
                 if (bDebug) echo "[dt_processEvent.groovy] Setting returnValue to: 'ERROR: SEND KEPTN EVENT FAILED'";
                 returnValue = [ "result": "fail", "data": "ERROR: SEND KEPTN EVENT FAILED" ];
