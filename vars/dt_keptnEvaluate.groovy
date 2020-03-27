@@ -259,7 +259,7 @@ def buildEvaluationResult (evaluationData, bDebug)
     def evalJson = new JsonBuilder(evaluationData);
     echo evalJson.toString();
 
-    for(def indicator : evaluationData.data.data.evaluationDetails.indicatorResults){
+    for(def indicator : evalJson.data.evaluationDetails.indicatorResults){
         echo indicator.value.metric;
     }
 
