@@ -253,7 +253,7 @@ def buildEvaluationResult (evaluationData, bDebug)
     echo evaluationData;
     //echo evaluationData.data.result;
     def jsonSlurper = new JsonSlurper();
-    def evalJson = jsonSlurper.parseText(evaluationData);
+    def evalJson = jsonSlurper.parseText("{" + evaluationData + "}");
     //String buildEvaluation = evalJson.result;
     echo evalJson;
 
