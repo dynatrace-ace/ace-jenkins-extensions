@@ -256,13 +256,13 @@ def getEvaluationResults(String keptn_url, String keptn_api_token, String keptn_
 }
 
 @NonCPS
-def buildEvaluationResult (evaluationData, bDebug)
+def buildEvaluationResult (groovy.json.internal.LazyMap evaluationData, bDebug)
 {
     if (bDebug) echo "[dt_processEvent.groovy] ENTER buildEvaluationResult";
 
     if (bDebug) echo "[dt_processEvent.groovy] Evaluation Data: " + evaluationData;
 
-    for(def indicator : evaluationData.data.evaluationDetails.indicatorResults){
+    for(def indicator : evaluationData.data.evaluationdetails.indicatorResults){
         echo indicator.value.metric;
     }
 
