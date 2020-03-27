@@ -261,10 +261,12 @@ def buildEvaluationResult (java.util.LinkedHashMap evaluationData, bDebug)
     //echo evaluationData;
     //echo evaluationData.data;
     //def evalJson = new JsonBuilder(evaluationData);
+    def jsonSlurper = new JsonSlurper();
     
-    echo evaluationData.data;
+    def jsonObject = jsonSlurper.parseText(evaluationData.data);
+    //echo evaluationData.data;
 
-    for(def indicator : evaluationData.data.evaluationDetails.indicatorResults){
+    for(def indicator : jsonObject.evaluationDetails.indicatorResults){
         echo indicator.value.metric;
     }
 
