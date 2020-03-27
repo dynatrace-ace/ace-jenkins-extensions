@@ -215,6 +215,8 @@ def getEvaluationResults(String keptn_url, String keptn_api_token, String keptn_
                 response.success = { resp, json ->
                     if (bDebug) echo "[dt_processEvent.groovy] Success: ${json} ++ Keptn Context: ${keptn_context}";
                     //if (json.data.result) evaluated = true;
+                    Class type = json.getClass();
+                    println(type);
                     returnValue = [ "result": "success", "data": "${json}" ];
                     return returnValue;
                 }
