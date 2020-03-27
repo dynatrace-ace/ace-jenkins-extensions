@@ -122,7 +122,7 @@ def processEvent( Map args) {
     //echo (returnValue.data);
     Class type = returnValue.data.getClass();
     println(type);
-    returnValue= buildEvaluationResult(returnValue, bDebug);
+    returnValue= buildEvaluationResult(returnValue.data, bDebug);
 
 
 
@@ -255,16 +255,16 @@ def getEvaluationResults(String keptn_url, String keptn_api_token, String keptn_
 }
 
 @NonCPS
-def buildEvaluationResult (java.util.LinkedHashMap evaluationData, bDebug)
+def buildEvaluationResult (groovy.json.internal.LazyMap evaluationData, bDebug)
 {
     if (bDebug) echo "[dt_processEvent.groovy] ENTER buildEvaluationResult";
     //echo evaluationData;
     //echo evaluationData.data;
     //def evalJson = new JsonBuilder(evaluationData);
-    def jsonSlurper = new JsonSlurper();
+    //def jsonSlurper = new JsonSlurper();
     
-    def jsonObject = jsonSlurper.parseText(evaluationData.data);
-    //echo evaluationData.data;
+    //def jsonObject = jsonSlurper.parseText(evaluationData.data);
+    echo evaluationData;
 
     for(def indicator : jsonObject.evaluationDetails.indicatorResults){
         echo indicator.value.metric;
