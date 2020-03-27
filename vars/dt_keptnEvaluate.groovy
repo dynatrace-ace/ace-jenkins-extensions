@@ -117,7 +117,8 @@ def processEvent( Map args) {
     if(returnValue.data == null || returnValue.data == "") return [ "result": "fail", "data": "ERROR: Invalid keptnContext returned from sending evaluation event." ];
     //if (bDebug) echo "[dt_processEvent.groovy] Keptn Project is: " + keptn_context; 
     returnValue = getEvaluationResults(strKeptnURL, strKeptnAPIToken, returnValue.data, iRetries, iWait, bDebug);
-    echo (returnValue.data.data);
+    echo (returnValue);
+    echo (returnValue.data);
     returnValue= buildEvaluationResult(returnValue, bDebug);
 
 
