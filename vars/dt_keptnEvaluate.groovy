@@ -117,8 +117,8 @@ def processEvent( Map args) {
     if(returnValue.data == null || returnValue.data == "") return [ "result": "fail", "data": "ERROR: Invalid keptnContext returned from sending evaluation event." ];
     //if (bDebug) echo "[dt_processEvent.groovy] Keptn Project is: " + keptn_context; 
     returnValue = getEvaluationResults(strKeptnURL, strKeptnAPIToken, returnValue.data, iRetries, iWait, bDebug);
-    echo (returnValue.toString());
-    echo (returnValue.data);
+    //echo (returnValue.toString());
+    //echo (returnValue.data);
     returnValue= buildEvaluationResult(returnValue, bDebug);
 
 
@@ -254,7 +254,9 @@ def buildEvaluationResult (evaluationData, bDebug)
 {
     if (bDebug) echo "[dt_processEvent.groovy] ENTER buildEvaluationResult";
     //echo evaluationData;
-    echo evaluationData.data;
+    //echo evaluationData.data;
+    def evalJson = new JsonBuilder(evaluationData);
+    echo evalJson.toString();
 
     for(def indicator : evaluationData.data.data.evaluationDetails.indicatorResults){
         echo indicator.value.metric;
