@@ -253,16 +253,16 @@ def getEvaluationResults(String keptn_url, String keptn_api_token, String keptn_
 }
 
 @NonCPS
-def buildEvaluationResult (evaluationData, bDebug)
+def buildEvaluationResult (java.util.LinkedHashMap evaluationData, bDebug)
 {
     if (bDebug) echo "[dt_processEvent.groovy] ENTER buildEvaluationResult";
     //echo evaluationData;
     //echo evaluationData.data;
     //def evalJson = new JsonBuilder(evaluationData);
-    def evalJson = JsonOutput.toJson(evaluationData);
-    echo evalJson;
+    
+    echo evaluationData.data;
 
-    for(def indicator : evalJson.data.evaluationDetails.indicatorResults){
+    for(def indicator : evaluationData.data.evaluationDetails.indicatorResults){
         echo indicator.value.metric;
     }
 
