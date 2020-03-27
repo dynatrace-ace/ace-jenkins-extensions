@@ -252,12 +252,8 @@ def buildEvaluationResult (evaluationData, bDebug)
     if (bDebug) echo "[dt_processEvent.groovy] ENTER buildEvaluationResult";
     //echo evaluationData;
     echo evaluationData.data;
-    def jsonSlurper = new JsonSlurper();
-    def evalJson = jsonSlurper.parseText(evaluationData);
-    //String buildEvaluation = evalJson.result;
-    echo evalJson;
 
-    for(def indicator : evalJson.evaluationDetails.indicatorResults){
+    for(def indicator : evaluationData.data.data.evaluationDetails.indicatorResults){
         echo indicator.value.metric;
     }
 
