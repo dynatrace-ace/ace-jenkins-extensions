@@ -209,7 +209,7 @@ def getEvaluationResults(String keptn_url, String keptn_api_token, String keptn_
                 response.success = { resp, json ->
                     if (bDebug) echo "[dt_processEvent.groovy] Success: ${json} ++ Keptn Context: ${keptn_context}";
                     //if (json.data.result) evaluated = true;
-                    returnValue = [ "result": "success", "data": "${json.data}" ];
+                    returnValue = [ "result": "success", "data": "${json}" ];
                     return returnValue;
                 }
                 
@@ -251,6 +251,7 @@ def buildEvaluationResult (evaluationData, bDebug)
 {
     if (bDebug) echo "[dt_processEvent.groovy] ENTER buildEvaluationResult";
     echo evaluationData;
+    echo evaluationData.data.result;
     def jsonSlurper = new JsonSlurper();
     def evalJson = jsonSlurper.parseText(evaluationData);
     String buildEvaluation = evalJson.result;
