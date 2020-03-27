@@ -250,7 +250,7 @@ def getEvaluationResults(String keptn_url, String keptn_api_token, String keptn_
 def buildEvaluationResult (evaluationData, bDebug)
 {
     if (bDebug) echo "[dt_processEvent.groovy] ENTER buildEvaluationResult";
-    echo evaluationData;
+    //echo evaluationData;
     echo evaluationData.data;
     def jsonSlurper = new JsonSlurper();
     def evalJson = jsonSlurper.parseText(evaluationData);
