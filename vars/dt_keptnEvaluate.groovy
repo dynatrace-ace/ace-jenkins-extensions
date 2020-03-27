@@ -1,7 +1,7 @@
 @Grab('org.codehaus.groovy.modules.http-builder:http-builder:0.7.1' )
  
 import groovyx.net.http.HTTPBuilder
-//import groovy.json.JsonOutput
+import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import groovy.json.JsonBuilder
 import static groovyx.net.http.Method.*
@@ -256,8 +256,9 @@ def buildEvaluationResult (evaluationData, bDebug)
     if (bDebug) echo "[dt_processEvent.groovy] ENTER buildEvaluationResult";
     //echo evaluationData;
     //echo evaluationData.data;
-    def evalJson = new JsonBuilder(evaluationData);
-    echo evalJson.toString();
+    //def evalJson = new JsonBuilder(evaluationData);
+    def evalJson = JsonOutput.toJson(evaluationData);
+    echo evalJson;
 
     for(def indicator : evalJson.data.evaluationDetails.indicatorResults){
         echo indicator.value.metric;
