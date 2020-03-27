@@ -251,9 +251,9 @@ def buildEvaluationResult (evaluationData, bDebug)
 {
     if (bDebug) echo "[dt_processEvent.groovy] ENTER buildEvaluationResult";
     echo evaluationData;
-    //echo evaluationData.data.result;
+    echo evaluationData.data;
     def jsonSlurper = new JsonSlurper();
-    def evalJson = jsonSlurper.parseText("{" + evaluationData + "}");
+    def evalJson = jsonSlurper.parseText(evaluationData);
     //String buildEvaluation = evalJson.result;
     echo evalJson;
 
