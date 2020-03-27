@@ -120,7 +120,7 @@ def processEvent( Map args) {
     returnValue = getEvaluationResults(strKeptnURL, strKeptnAPIToken, returnValue.data, iRetries, iWait, bDebug);
     //echo (returnValue.toString());
     //echo (returnValue.data);
-    echo returnValue.getClass();
+    echo returnValue.getClass().toString();
     returnValue= buildEvaluationResult(returnValue, bDebug);
 
 
