@@ -120,9 +120,9 @@ def processEvent( Map args) {
     returnValue = getEvaluationResults(strKeptnURL, strKeptnAPIToken, returnValue.data, iRetries, iWait, bDebug);
     //echo (returnValue.toString());
     //echo (returnValue.data);
-    Class type = returnValue.data.getClass();
-    println(type);
-    returnValue= buildEvaluationResult(returnValue.data, bDebug);
+    //Class type = returnValue.data.getClass();
+    //println(type);
+    //returnValue= buildEvaluationResult(returnValue, bDebug);
 
 
 
@@ -217,7 +217,8 @@ def getEvaluationResults(String keptn_url, String keptn_api_token, String keptn_
                     //if (json.data.result) evaluated = true;
                     Class type = json.getClass();
                     println(type);
-                    returnValue = [ "result": "success", "data": "${json}" ];
+                    //returnValue = [ "result": "success", "data": "${json}" ];
+                    returnValue = buildEvaluationResult(json, bDebug);
                     return returnValue;
                 }
                 
@@ -255,18 +256,13 @@ def getEvaluationResults(String keptn_url, String keptn_api_token, String keptn_
 }
 
 @NonCPS
-def buildEvaluationResult (groovy.json.internal.LazyMap evaluationData, bDebug)
+def buildEvaluationResult (evaluationData, bDebug)
 {
     if (bDebug) echo "[dt_processEvent.groovy] ENTER buildEvaluationResult";
-    //echo evaluationData;
-    //echo evaluationData.data;
-    //def evalJson = new JsonBuilder(evaluationData);
-    //def jsonSlurper = new JsonSlurper();
-    
-    //def jsonObject = jsonSlurper.parseText(evaluationData.data);
-    echo evaluationData;
 
-    for(def indicator : jsonObject.evaluationDetails.indicatorResults){
+    if (bDebug) echo "[dt_processEvent.groovy] Evaluation Data: " + evaluationData;
+
+    for(def indicator : evaluationData.data.evaluationDetails.indicatorResults){
         echo indicator.value.metric;
     }
 
