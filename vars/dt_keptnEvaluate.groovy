@@ -217,8 +217,8 @@ def getEvaluationResults(String keptn_url, String keptn_api_token, String keptn_
                     //if (json.data.result) evaluated = true;
                     Class type = json.getClass();
                     println(type);
-                    //returnValue = [ "result": "success", "data": "${json}" ];
-                    returnValue = buildEvaluationResult(json, bDebug);
+                    returnValue = [ "result": "success", "data": "${json}" ];
+                    def evalResult = buildEvaluationResult(json, bDebug);
                     return returnValue;
                 }
                 
@@ -259,13 +259,15 @@ def getEvaluationResults(String keptn_url, String keptn_api_token, String keptn_
 def buildEvaluationResult (groovy.json.internal.LazyMap evaluationData, bDebug)
 {
     if (bDebug) echo "[dt_processEvent.groovy] ENTER buildEvaluationResult";
-
     if (bDebug) echo "[dt_processEvent.groovy] Evaluation Data: " + evaluationData;
-
+    
+    def returnValue;
     for(def indicator : evaluationData.data.evaluationdetails.indicatorResults){
         echo indicator.value.metric;
     }
 
+    returnValue.data = evaluationData.
+//https://examples.javacodegeeks.com/jvm-languages/groovy/groovy-map-example/
     returnValue = evaluationData
 
     return returnValue;
